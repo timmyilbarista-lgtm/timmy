@@ -388,16 +388,29 @@ const Problemi = () => {
                         </div>
                         
                         <div className="flex flex-col gap-2">
-                          {eq && (eq.contact_phone || eq.contact_whatsapp) && (
+                          {(eq && (eq.contact_phone || eq.contact_whatsapp)) || (problem.contact_phone || problem.contact_whatsapp) ? (
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => setContactDialog({ open: true, equipment: eq })}
+                              onClick={() => setContactDialog({ open: true, equipment: eq || {
+                                contact_phone: problem.contact_phone,
+                                contact_email: problem.contact_email,
+                                contact_whatsapp: problem.contact_whatsapp,
+                                name: problem.equipment_name
+                              }})}
                             >
                               <Phone className="w-4 h-4 mr-1" />
                               Contatta
                             </Button>
-                          )}
+                          ) : null}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => openReportDialog(problem)}
+                          >
+                            <Pencil className="w-4 h-4 mr-1" />
+                            Modifica
+                          </Button>
                           <Button
                             size="sm"
                             variant="outline"
