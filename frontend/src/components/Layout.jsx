@@ -136,7 +136,7 @@ const Layout = () => {
 
       {/* Mobile Bottom Navigation */}
       <nav className="md:hidden mobile-nav glass-effect border-t border-border">
-        <div className="flex justify-around py-2">
+        <div className="flex justify-between px-1 py-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path ||
@@ -147,12 +147,12 @@ const Layout = () => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors",
+                  "flex flex-col items-center gap-0 px-1 py-1 rounded-lg transition-colors",
                   isActive ? "text-accent" : "text-muted-foreground"
                 )}
               >
-                <Icon className="w-5 h-5" />
-                <span className="text-[10px]">{item.label}</span>
+                <Icon className="w-4 h-4" />
+                <span className="text-[8px]">{item.label}</span>
               </NavLink>
             );
           })}
@@ -160,12 +160,12 @@ const Layout = () => {
             <NavLink
               to="/manager"
               className={cn(
-                "flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors",
+                "flex flex-col items-center gap-0 px-1 py-1 rounded-lg transition-colors",
                 location.pathname === "/manager" ? "text-accent" : "text-muted-foreground"
               )}
             >
-              <Settings className="w-5 h-5" />
-              <span className="text-[10px]">Gestione</span>
+              <Settings className="w-4 h-4" />
+              <span className="text-[8px]">Gestione</span>
             </NavLink>
           )}
         </div>
