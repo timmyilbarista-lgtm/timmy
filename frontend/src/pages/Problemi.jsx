@@ -195,7 +195,7 @@ const Problemi = () => {
       }
       
       toast.success("Problema segnalato!");
-      setReportDialog({ open: false });
+      setReportDialog({ open: false, problem: null });
       
       // Show contact dialog if contacts available
       if (contactInfo) {
