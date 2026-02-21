@@ -25,6 +25,6 @@
   <circle cx="195" cy="95" r="28" fill="#A7DFF0"/>
   <circle cx="265" cy="90" r="25" fill="#A7DFF0"/>
   
-  <!-- Lettera B bianca al centro della tazza -->
-  <text x="230" y="320" font-family="Arial, sans-serif" font-size="180" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  <!-- Lettera B bianca al centro della tazza - più in basso -->
+  <text x="230" y="355" font-family="Arial, sans-serif" font-size="160" font-weight="bold" fill="white" text-anchor="middle">B</text>
 </svg>
