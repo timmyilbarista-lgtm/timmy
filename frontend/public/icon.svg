@@ -2,29 +2,53 @@
   <!-- Sfondo bianco -->
   <rect width="512" height="512" rx="100" fill="white"/>
   
-  <!-- Ombra -->
-  <ellipse cx="230" cy="450" rx="120" ry="25" fill="#D1D5DB" opacity="0.6"/>
+  <!-- Ombra sotto -->
+  <ellipse cx="190" cy="415" rx="100" ry="15" fill="#D1D5DB" opacity="0.5"/>
   
-  <!-- Corpo tazza - marrone scuro -->
-  <path d="M100 150 L100 380 Q100 420 140 420 L320 420 Q360 420 360 380 L360 150 Z" fill="#B5651D"/>
+  <!-- Tazza cappuccino italiano - bombata larga sopra, stretta sotto -->
+  <path d="M40 200 
+           Q40 180 80 175
+           L320 175
+           Q360 180 360 200
+           Q380 280 340 350
+           Q300 400 190 400
+           Q80 400 60 350
+           Q20 280 40 200
+           Z" fill="#B5651D"/>
   
-  <!-- Parte laterale tazza - marrone più chiaro -->
-  <path d="M100 150 L100 380 Q100 420 140 420 L160 420 L160 150 Z" fill="#CD853F" opacity="0.6"/>
+  <!-- Riflesso sinistro -->
+  <path d="M50 200 
+           Q50 190 70 185
+           L100 185
+           Q70 250 80 320
+           Q85 360 100 380
+           L80 375
+           Q40 350 35 300
+           Q25 250 50 200
+           Z" fill="#CD853F" opacity="0.4"/>
   
-  <!-- Manico tazza -->
-  <path d="M360 180 Q420 180 420 260 Q420 340 360 340" stroke="#B5651D" stroke-width="35" fill="none" stroke-linecap="round"/>
+  <!-- Manico elegante curvato -->
+  <path d="M360 210 
+           Q400 200 420 240
+           Q440 290 420 340
+           Q400 380 360 370" 
+           stroke="#B5651D" stroke-width="22" fill="none" stroke-linecap="round"/>
   
-  <!-- Riflesso sul manico -->
-  <path d="M375 200 Q400 200 400 260 Q400 310 375 320" stroke="#CD853F" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.5"/>
+  <!-- Riflesso manico -->
+  <path d="M372 230 
+           Q395 225 405 255
+           Q415 290 405 325
+           Q395 350 375 350" 
+           stroke="#CD853F" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.4"/>
   
-  <!-- Schiuma latte - azzurro chiaro -->
-  <ellipse cx="230" cy="145" rx="130" ry="45" fill="#87CEEB"/>
-  <circle cx="160" cy="120" r="35" fill="#87CEEB"/>
-  <circle cx="230" cy="105" r="40" fill="#87CEEB"/>
-  <circle cx="300" cy="115" r="35" fill="#87CEEB"/>
-  <circle cx="195" cy="95" r="28" fill="#A7DFF0"/>
-  <circle cx="265" cy="90" r="25" fill="#A7DFF0"/>
+  <!-- Schiuma latte azzurra -->
+  <ellipse cx="200" cy="185" rx="145" ry="40" fill="#87CEEB"/>
+  <circle cx="100" cy="165" r="35" fill="#87CEEB"/>
+  <circle cx="200" cy="150" r="42" fill="#87CEEB"/>
+  <circle cx="290" cy="160" r="38" fill="#87CEEB"/>
+  <circle cx="150" cy="135" r="28" fill="#A7DFF0"/>
+  <circle cx="240" cy="130" r="25" fill="#A7DFF0"/>
   
-  <!-- Lettera B bianca al centro della tazza - più in basso -->
-  <text x="230" y="355" font-family="Arial, sans-serif" font-size="160" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  <!-- Lettera B bianca al centro -->
+  <text x="195" y="330" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="white" text-anchor="middle">B</text>
 </svg>
