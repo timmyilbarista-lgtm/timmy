@@ -36,6 +36,7 @@ const iconMap = {
   boxes: Boxes,
   wallet: Wallet,
   thermometer: Thermometer,
+  wrench: Wrench,
 };
 
 const Dashboard = () => {
