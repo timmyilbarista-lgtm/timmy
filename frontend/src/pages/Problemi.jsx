@@ -625,12 +625,12 @@ const Problemi = () => {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setReportDialog({ open: false })}>
+            <Button variant="outline" onClick={() => setReportDialog({ open: false, problem: null })}>
               Annulla
             </Button>
-            <Button onClick={submitReport} className="bg-destructive hover:bg-destructive/90">
+            <Button onClick={submitReport} className={reportDialog.problem ? "" : "bg-destructive hover:bg-destructive/90"}>
               <Send className="w-4 h-4 mr-2" />
-              Invia Segnalazione
+              {reportDialog.problem ? "Salva Modifiche" : "Invia Segnalazione"}
             </Button>
           </DialogFooter>
         </DialogContent>
