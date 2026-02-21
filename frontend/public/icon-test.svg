@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Sfondo bianco -->
+  <rect width="512" height="512" rx="100" fill="white"/>
+  
+  <!-- Ombra -->
+  <ellipse cx="220" cy="440" rx="140" ry="25" fill="#D1D5DB" opacity="0.6"/>
+  
+  <!-- Corpo tazza cappuccino - bassa e bombata -->
+  <path d="M80 220 
+           Q60 280 80 340 
+           Q100 400 160 410 
+           L300 410 
+           Q360 400 380 340 
+           Q400 280 380 220 
+           Z" fill="#B5651D"/>
+  
+  <!-- Riflesso laterale -->
+  <path d="M80 220 
+           Q60 280 80 340 
+           Q100 400 130 405 
+           L130 225 
+           Z" fill="#CD853F" opacity="0.5"/>
+  
+  <!-- Manico tazza - più rotondo -->
+  <path d="M380 250 Q450 250 450 320 Q450 390 380 380" stroke="#B5651D" stroke-width="32" fill="none" stroke-linecap="round"/>
+  
+  <!-- Riflesso manico -->
+  <path d="M390 270 Q420 270 420 320 Q420 365 395 365" stroke="#CD853F" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Schiuma latte - azzurro chiaro, più larga -->
+  <ellipse cx="230" cy="215" rx="150" ry="50" fill="#87CEEB"/>
+  <circle cx="140" cy="185" r="40" fill="#87CEEB"/>
+  <circle cx="230" cy="170" r="45" fill="#87CEEB"/>
+  <circle cx="320" cy="180" r="40" fill="#87CEEB"/>
+  <circle cx="185" cy="155" r="30" fill="#A7DFF0"/>
+  <circle cx="275" cy="150" r="28" fill="#A7DFF0"/>
+  
+  <!-- Lettera B bianca al centro -->
+  <text x="225" y="355" font-family="Arial, sans-serif" font-size="130" font-weight="bold" fill="white" text-anchor="middle">B</text>
+</svg>
