@@ -616,6 +616,106 @@ async def delete_work_schedule(schedule_id: str, user: dict = Depends(require_ma
     await db.work_schedules.delete_one({"id": schedule_id})
     return {"success": True}
 
+# ============== EQUIPMENT ENDPOINTS ==============
+
+@api_router.get("/equipment")
+async def get_equipment(user: dict = Depends(get_current_user)):
+    equipment = await db.equipment.find({}, {"_id": 0}).sort("name", 1).to_list(100)
+    return equipment
+
+@api_router.post("/equipment")
+async def create_equipment(data: EquipmentCreate, user: dict = Depends(require_manager)):
+    equipment = EquipmentBase(**data.model_dump())
+    doc = equipment.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.equipment.insert_one(doc)
+    return {"id": equipment.id, "name": equipment.name, "type": equipment.type}
+
+@api_router.put("/equipment/{equipment_id}")
+async def update_equipment(equipment_id: str, data: EquipmentUpdate, user: dict = Depends(require_manager)):
+    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    result = await db.equipment.update_one({"id": equipment_id}, {"$set": update_data})
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+    return {"success": True}
+
+@api_router.delete("/equipment/{equipment_id}")
+async def delete_equipment(equipment_id: str, user: dict = Depends(require_manager)):
+    await db.equipment.delete_one({"id": equipment_id})
+    return {"success": True}
+
+# ============== PROBLEM REPORTS ENDPOINTS ==============
+
+@api_router.get("/problems")
+async def get_problems(
+    status: Optional[str] = None,
+    user: dict = Depends(get_current_user)
+):
+    query = {}
+    if status:
+        query["status"] = status
+    problems = await db.problems.find(query, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return problems
+
+@api_router.get("/problems/{problem_id}")
+async def get_problem(problem_id: str, user: dict = Depends(get_current_user)):
+    problem = await db.problems.find_one({"id": problem_id}, {"_id": 0})
+    if not problem:
+        raise HTTPException(status_code=404, detail="Problem not found")
+    return problem
+
+@api_router.post("/problems")
+async def create_problem(data: ProblemReportCreate, user: dict = Depends(get_current_user)):
+    # Get equipment name
+    equipment = await db.equipment.find_one({"id": data.equipment_id}, {"_id": 0})
+    if not equipment:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+    
+    problem = ProblemReportBase(
+        equipment_id=data.equipment_id,
+        equipment_name=equipment["name"],
+        description=data.description,
+        priority=data.priority,
+        reported_by=user["id"],
+        reported_by_name=user["name"]
+    )
+    doc = problem.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('resolved_at'):
+        doc['resolved_at'] = doc['resolved_at'].isoformat()
+    await db.problems.insert_one(doc)
+    
+    return {
+        "id": problem.id,
+        "equipment_name": problem.equipment_name,
+        "description": problem.description,
+        "contact": {
+            "name": equipment.get("contact_name", ""),
+            "phone": equipment.get("contact_phone", ""),
+            "email": equipment.get("contact_email", ""),
+            "whatsapp": equipment.get("contact_whatsapp", "")
+        }
+    }
+
+@api_router.put("/problems/{problem_id}")
+async def update_problem(problem_id: str, data: ProblemReportUpdate, user: dict = Depends(get_current_user)):
+    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    if data.status == "resolved":
+        update_data["resolved_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["resolved_by"] = user["id"]
+    
+    result = await db.problems.update_one({"id": problem_id}, {"$set": update_data})
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Problem not found")
+    return {"success": True}
+
+@api_router.delete("/problems/{problem_id}")
+async def delete_problem(problem_id: str, user: dict = Depends(require_manager)):
+    await db.problems.delete_one({"id": problem_id})
+    return {"success": True}
+
 # ============== SEED DATA ==============
 
 @api_router.post("/seed")
