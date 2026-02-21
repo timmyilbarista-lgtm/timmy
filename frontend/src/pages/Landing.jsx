@@ -22,24 +22,23 @@ const Landing = () => {
         <div className="relative max-w-4xl mx-auto px-6 py-16 text-center">
           {/* Logo */}
           <div className="mb-8 text-center">
-            <h2 className="text-4xl font-bold tracking-wide" style={{ fontFamily: 'Georgia, serif', color: '#3d2314' }}>
-              TIMMY<span style={{ fontSize: '14px', verticalAlign: 'super' }}>®</span>
+            <h2 className="text-5xl font-bold tracking-wide text-white" style={{ fontFamily: 'Georgia, serif' }}>
+              TIMMY<span style={{ fontSize: '16px', verticalAlign: 'super' }}>®</span>
             </h2>
-            <p className="text-sm tracking-[0.3em] font-medium" style={{ color: '#3d2314' }}>COFFEE MASTER</p>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#3d2314' }}></span>
-              <svg width="28" height="36" viewBox="0 0 28 36" fill="none" className="opacity-90">
-                <path d="M14 0C14 0 0 12 0 22C0 28 4 36 14 36C24 36 28 28 28 22C28 12 14 0 14 0Z" fill="url(#grain)"/>
-                <path d="M14 4C14 4 16 18 14 32" stroke="#3d2314" strokeWidth="1.5" fill="none"/>
+            <p className="text-base tracking-[0.3em] font-medium text-amber-200 mt-1">COFFEE MASTER</p>
+            <div className="flex items-center justify-center gap-3 mt-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              <svg width="24" height="32" viewBox="0 0 24 32" fill="none">
+                <ellipse cx="12" cy="16" rx="10" ry="14" fill="#D4A574" opacity="0.9"/>
+                <path d="M12 4C12 4 13.5 14 12 28" stroke="#8B6914" strokeWidth="1.5" fill="none"/>
+                <ellipse cx="12" cy="16" rx="10" ry="14" fill="url(#coffeeGrain)" opacity="0.6"/>
                 <defs>
-                  <pattern id="grain" patternUnits="userSpaceOnUse" width="4" height="4">
-                    <circle cx="1" cy="1" r="0.5" fill="#8B7355"/>
-                    <circle cx="3" cy="3" r="0.5" fill="#6B5344"/>
-                    <circle cx="2" cy="2" r="0.3" fill="#9B8365"/>
+                  <pattern id="coffeeGrain" patternUnits="userSpaceOnUse" width="3" height="3">
+                    <circle cx="1.5" cy="1.5" r="0.5" fill="#A08060"/>
                   </pattern>
                 </defs>
               </svg>
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#3d2314' }}></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
             </div>
           </div>
           
