@@ -60,6 +60,7 @@ const iconOptions = [
   { value: "boxes", label: "Scatole", icon: Boxes },
   { value: "wallet", label: "Cassa", icon: Wallet },
   { value: "thermometer", label: "Temperatura", icon: Thermometer },
+  { value: "wrench", label: "Attrezzature", icon: Wrench },
 ];
 
 const Manager = () => {
