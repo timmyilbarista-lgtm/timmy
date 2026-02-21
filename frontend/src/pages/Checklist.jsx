@@ -145,6 +145,38 @@ const Checklist = () => {
     setNoteDialog({ open: false, item: null, note: "" });
   };
 
+  const openEditDialog = (item) => {
+    setEditForm({ name: item.name, description: item.description || "" });
+    setEditDialog({ open: true, item });
+  };
+
+  const saveEdit = async () => {
+    if (!editDialog.item) return;
+    try {
+      await api.put(`/checklist-items/${editDialog.item.id}`, {
+        name: editForm.name,
+        description: editForm.description,
+      });
+      toast.success("Voce modificata!");
+      setEditDialog({ open: false, item: null });
+      fetchData();
+    } catch (error) {
+      toast.error("Errore nel salvataggio");
+    }
+  };
+
+  const deleteItem = async () => {
+    if (!deleteDialog.item) return;
+    try {
+      await api.delete(`/checklist-items/${deleteDialog.item.id}`);
+      toast.success("Voce eliminata!");
+      setDeleteDialog({ open: false, item: null });
+      fetchData();
+    } catch (error) {
+      toast.error("Errore nell'eliminazione");
+    }
+  };
+
   const isItemCompleted = (itemId) => {
     return shift?.completions?.find((c) => c.item_id === itemId)?.completed || false;
   };
