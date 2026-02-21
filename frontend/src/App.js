@@ -51,6 +51,7 @@ function AppRoutes() {
         <Route index element={<Dashboard />} />
         <Route path="checklist" element={<Checklist />} />
         <Route path="checklist/:categoryId" element={<Checklist />} />
+        <Route path="turni" element={<Turni />} />
         <Route path="notes" element={<Notes />} />
         <Route path="history" element={<History />} />
         <Route
