@@ -624,13 +624,59 @@ const Problemi = () => {
               </div>
             )}
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={() => setReportDialog({ open: false, problem: null })}>
               Annulla
             </Button>
+            
+            {/* Pulsanti invio diretto */}
+            {(reportForm.contact_phone || reportForm.contact_whatsapp || reportForm.contact_email) && !reportDialog.problem && (
+              <>
+                {reportForm.contact_phone && (
+                  <Button 
+                    onClick={async () => {
+                      await submitReport();
+                      window.location.href = `tel:${reportForm.contact_phone}`;
+                    }}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Salva e Chiama
+                  </Button>
+                )}
+                {reportForm.contact_whatsapp && (
+                  <Button 
+                    onClick={async () => {
+                      await submitReport();
+                      const msg = encodeURIComponent(`Segnalazione problema: ${reportForm.equipment_name_manual}\n${reportForm.description}`);
+                      window.open(`https://wa.me/${reportForm.contact_whatsapp.replace(/\D/g, '')}?text=${msg}`, '_blank');
+                    }}
+                    className="bg-[#25D366] hover:bg-[#20BD5A]"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Salva e WhatsApp
+                  </Button>
+                )}
+                {reportForm.contact_email && (
+                  <Button 
+                    onClick={async () => {
+                      await submitReport();
+                      const subject = encodeURIComponent(`Segnalazione problema: ${reportForm.equipment_name_manual}`);
+                      const body = encodeURIComponent(reportForm.description);
+                      window.location.href = `mailto:${reportForm.contact_email}?subject=${subject}&body=${body}`;
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Salva e Email
+                  </Button>
+                )}
+              </>
+            )}
+            
             <Button onClick={submitReport} className={reportDialog.problem ? "" : "bg-destructive hover:bg-destructive/90"}>
               <Send className="w-4 h-4 mr-2" />
-              {reportDialog.problem ? "Salva Modifiche" : "Invia Segnalazione"}
+              {reportDialog.problem ? "Salva Modifiche" : "Solo Salva"}
             </Button>
           </DialogFooter>
         </DialogContent>
