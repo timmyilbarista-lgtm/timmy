@@ -204,7 +204,8 @@ const Problemi = () => {
       
       fetchData();
     } catch (error) {
-      toast.error("Errore nella segnalazione");
+      console.error("Errore segnalazione:", error);
+      toast.error(error.response?.data?.detail || "Errore nella segnalazione");
     }
   };
 
