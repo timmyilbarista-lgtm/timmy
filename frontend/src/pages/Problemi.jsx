@@ -530,10 +530,10 @@ const Problemi = () => {
       </Tabs>
 
       {/* Report Problem Dialog */}
-      <Dialog open={reportDialog.open} onOpenChange={(open) => !open && setReportDialog({ open: false })}>
+      <Dialog open={reportDialog.open} onOpenChange={(open) => !open && setReportDialog({ open: false, problem: null })}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Segnala Problema</DialogTitle>
+            <DialogTitle>{reportDialog.problem ? "Modifica Segnalazione" : "Segnala Problema"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -545,7 +545,7 @@ const Problemi = () => {
               />
             </div>
             
-            {equipment.length > 0 && (
+            {equipment.length > 0 && !reportDialog.problem && (
               <div className="space-y-2">
                 <Label className="text-muted-foreground text-sm">Oppure seleziona da lista</Label>
                 <Select
