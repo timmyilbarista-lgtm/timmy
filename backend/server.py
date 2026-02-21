@@ -215,6 +215,12 @@ class ProblemReportCreate(BaseModel):
 class ProblemReportUpdate(BaseModel):
     status: Optional[str] = None
     resolution_notes: Optional[str] = None
+    equipment_name: Optional[str] = None
+    description: Optional[str] = None
+    priority: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_whatsapp: Optional[str] = None
 
 # ============== HELPERS ==============
 
