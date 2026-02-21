@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       fetchUser();
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       const response = await api.get("/auth/me");
       setUser(response.data);
     } catch (error) {
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       delete api.defaults.headers.common["Authorization"];
     } finally {
       setLoading(false);
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (name, pin) => {
     const response = await api.post("/auth/login", { name, pin });
     const { token, user: userData } = response.data;
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setUser(userData);
     return userData;
@@ -49,14 +49,14 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, pin, role = "barista") => {
     const response = await api.post("/auth/register", { name, pin, role });
     const { token, user: userData } = response.data;
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setUser(userData);
     return userData;
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     delete api.defaults.headers.common["Authorization"];
     setUser(null);
   };
