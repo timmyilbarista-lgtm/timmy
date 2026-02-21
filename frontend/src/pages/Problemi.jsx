@@ -592,7 +592,7 @@ const Problemi = () => {
             </div>
 
             {/* Contatti manuali */}
-            {!reportForm.equipment_id && (
+            {(!reportForm.equipment_id || reportDialog.problem) && (
               <div className="border-t pt-4 space-y-3">
                 <Label className="text-sm font-medium">Contatti fornitore/tecnico (opzionale)</Label>
                 <div className="space-y-2">
