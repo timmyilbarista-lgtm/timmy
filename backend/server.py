@@ -362,19 +362,6 @@ async def delete_checklist_item(item_id: str, user: dict = Depends(require_manag
     await db.checklist_items.update_one({"id": item_id}, {"$set": {"is_active": False}})
     return {"success": True}
 
-class ReorderItem(BaseModel):
-    id: str
-    order: int
-
-class ReorderRequest(BaseModel):
-    items: List[ReorderItem]
-
-@api_router.put("/checklist-items/reorder")
-async def reorder_checklist_items(data: ReorderRequest, user: dict = Depends(get_current_user)):
-    for item in data.items:
-        await db.checklist_items.update_one({"id": item.id}, {"$set": {"order": item.order}})
-    return {"success": True}
-
 # ============== SHIFT ENDPOINTS ==============
 
 @api_router.get("/shifts/current")
