@@ -25,7 +25,7 @@ const Landing = () => {
             <h2 className="text-3xl font-bold tracking-wide text-white" style={{ fontFamily: 'Georgia, serif' }}>
               TIMMY<span style={{ fontSize: '12px', verticalAlign: 'super' }}>®</span>
             </h2>
-            <p className="text-xs tracking-[0.25em] font-medium text-amber-200">COFFEE MASTER</p>
+            <p className="text-[10px] tracking-[0.15em] font-medium text-amber-200">COFFEE MASTER</p>
             <div className="flex items-center justify-center gap-2 mt-1">
               <span className="w-1 h-1 rounded-full bg-amber-400"></span>
               <svg width="18" height="24" viewBox="0 0 24 32" fill="none">
