@@ -62,10 +62,12 @@ const iconOptions = [
 ];
 
 const Manager = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   // Dialogs
   const [categoryDialog, setCategoryDialog] = useState({ open: false, category: null });
