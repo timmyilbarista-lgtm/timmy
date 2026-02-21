@@ -11,7 +11,8 @@ import {
   Sun,
   Moon,
   Coffee,
-  CalendarDays
+  CalendarDays,
+  AlertTriangle
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "../lib/utils";
@@ -20,6 +21,7 @@ const navItems = [
   { path: "/", icon: LayoutDashboard, label: "Dashboard" },
   { path: "/checklist", icon: ClipboardCheck, label: "Checklist" },
   { path: "/turni", icon: CalendarDays, label: "Turni" },
+  { path: "/problemi", icon: AlertTriangle, label: "Problemi" },
   { path: "/notes", icon: MessageSquare, label: "Note" },
   { path: "/history", icon: History, label: "Storico" },
 ];
