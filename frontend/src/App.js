@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Checklist from "./pages/Checklist";
 import Turni from "./pages/Turni";
+import Problemi from "./pages/Problemi";
 import Notes from "./pages/Notes";
 import History from "./pages/History";
 import Manager from "./pages/Manager";
