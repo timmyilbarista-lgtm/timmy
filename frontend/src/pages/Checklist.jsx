@@ -63,6 +63,11 @@ const Checklist = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [noteDialog, setNoteDialog] = useState({ open: false, item: null, note: "" });
+  const [editDialog, setEditDialog] = useState({ open: false, item: null });
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, item: null });
+  const [editForm, setEditForm] = useState({ name: "", description: "" });
+
+  const isManager = user?.role === "manager";
 
   useEffect(() => {
     fetchData();
