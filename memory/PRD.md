@@ -33,6 +33,18 @@ App per gestione cambi turno nei bar. I baristi devono completare una checklist 
 - Sidebar navigation + mobile bottom nav
 - Dark/Light mode automatico (basato su ora)
 
+## What's Been Implemented (Feb 2026 Update)
+### New Features Added
+- **Calendario Turni**: Sezione "Turni" con calendario mensile, gestione orari staff
+- **Segnalazione Problemi**: Sezione "Problemi" per guasti attrezzature con contatti diretti (telefono, WhatsApp, email)
+- **Logout Forzato**: Login richiesto ad ogni apertura app (usa sessionStorage invece di localStorage)
+- **Navigazione Mobile**: Menu ottimizzato per visualizzazione verticale
+- **Freccia Ritorno**: Presente in tutte le pagine per tornare alla Dashboard
+- **Icona App Personalizzata**: PWA con icona dedicata
+
+### Bug Fix (21 Feb 2026)
+- **Risolto**: App non si apriva a causa di import duplicati di `Link` in `Checklist.jsx` e `Notes.jsx`
+
 ## Test Results
 - Backend: 100% (26/26 tests)
 - Frontend: 100% (all flows working)
