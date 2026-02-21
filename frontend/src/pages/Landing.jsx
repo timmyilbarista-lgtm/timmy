@@ -21,24 +21,20 @@ const Landing = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200')] bg-cover bg-center opacity-20" />
         <div className="relative max-w-4xl mx-auto px-6 py-16 text-center">
           {/* Logo */}
-          <div className="mb-6 inline-block">
-            <h2 className="text-3xl font-bold tracking-wide text-white leading-none text-left" style={{ fontFamily: 'Georgia, serif' }}>
-              TIMMY<span style={{ fontSize: '12px', verticalAlign: 'super' }}>®</span>
+          <div className="mb-6 text-center">
+            <h2 className="text-4xl font-bold tracking-wider text-white leading-none" style={{ fontFamily: 'Georgia, serif' }}>
+              TIMMY<span style={{ fontSize: '10px', verticalAlign: 'super' }}>®</span>
             </h2>
-            <p className="text-[10px] tracking-[0.12em] font-medium text-amber-200 mt-0 text-left pl-[2px]">COFFEE MASTER</p>
-            <div className="flex items-center justify-center gap-2 -mt-0.5">
+            <p className="text-[11px] tracking-[0.2em] font-medium text-amber-200 mt-1">COFFEE MASTER</p>
+            <div className="flex items-center justify-center gap-1.5 mt-2">
+              <span className="text-[8px] text-amber-300">EST.</span>
               <span className="w-1 h-1 rounded-full bg-amber-400"></span>
-              <svg width="18" height="24" viewBox="0 0 24 32" fill="none">
-                <ellipse cx="12" cy="16" rx="10" ry="14" fill="#D4A574" opacity="0.9"/>
-                <path d="M12 4C12 4 13.5 14 12 28" stroke="#8B6914" strokeWidth="1.5" fill="none"/>
-                <ellipse cx="12" cy="16" rx="10" ry="14" fill="url(#coffeeGrain)" opacity="0.6"/>
-                <defs>
-                  <pattern id="coffeeGrain" patternUnits="userSpaceOnUse" width="3" height="3">
-                    <circle cx="1.5" cy="1.5" r="0.5" fill="#A08060"/>
-                  </pattern>
-                </defs>
+              <svg width="20" height="28" viewBox="0 0 24 32" fill="none">
+                <ellipse cx="12" cy="16" rx="10" ry="14" fill="#C4956A" opacity="0.95"/>
+                <path d="M12 5C12 5 13 15 12 27" stroke="#6B4423" strokeWidth="1" fill="none"/>
               </svg>
               <span className="w-1 h-1 rounded-full bg-amber-400"></span>
+              <span className="text-[8px] text-amber-300">2.0</span>
             </div>
           </div>
           
