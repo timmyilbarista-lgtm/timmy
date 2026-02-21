@@ -65,6 +65,7 @@ const Problemi = () => {
   
   const [reportForm, setReportForm] = useState({
     equipment_id: "",
+    equipment_name_manual: "",
     description: "",
     priority: "medium"
   });
