@@ -1,0 +1,389 @@
+<analysis>Análise da sessão anterior e resumo para o próximo agente.
+
+**original_problem_statement:**
+L'utente desidera creare un'applicazione per baristi per gestire i cambi di turno. L'app deve fungere da checklist per attività come carichi, pulizia, ordini, ecc. Quando un nuovo barista inizia il turno, può aprire l'app su un tablet per vedere quali compiti sono stati completati (spunta verde) e quali no (croce rossa), evitando di dover chiedere ai colleghi.
+
+**PRODUCT REQUIREMENTS:**
+- Checklist digitale per i compiti del turno.
+- Stato visivo (completato/non completato) per ogni compito.
+- Ruoli utente: Barista (completa la checklist) e Manager (gestisce la checklist).
+- Storico dei turni per la revisione.
+- Sezione per le note tra i turni.
+- Design a tema caffè.
+- Gestione degli orari dei turni (calendario).
+- Funzionalità di segnalazione problemi per le attrezzature.
+- Accesso tramite PIN.
+
+**User's preferred language**: L'utente parla **italiano**. Il prossimo agente DEVE rispondere esclusivamente in italiano.
+
+**what currently exists?**
+È stata sviluppata un'applicazione full-stack chiamata BaristaShift con un backend FastAPI/MongoDB e un frontend React. L'applicazione include:
+- Autenticazione basata su PIN con ruoli (Manager/Barista).
+- Un pannello di Gestione per i manager per creare, leggere, aggiornare ed eliminare (CRUD) categorie della checklist, attività e utenti.
+- Una dashboard principale, visualizzazione della checklist per categoria, una sezione per le note e uno storico dei turni.
+- Una sezione Turni con un calendario mensile per la pianificazione degli orari del personale.
+- Una sezione Problemi per segnalare guasti alle attrezzature, con la possibilità di contattare direttamente l'assistenza (chiamata, WhatsApp, email).
+- L'app è stata progettata per richiedere il login a ogni apertura, garantendo che l'utente corretto stia accedendo.
+- L'interfaccia è stata ottimizzata per la visualizzazione mobile (verticale) e include un'icona personalizzata.
+
+**Last working item**:
+-   **Last item agent was working**: L'utente ha segnalato che l'applicazione non si apre più dopo averla reinstallata sul proprio telefono (non me lo fa aprire). L'agente ha iniziato a indagare sul problema cercando di visualizzare i log di sistema per identificare la causa, ma è stato interrotto dalle continue richieste dell'utente di ricevere il link dell'app. Il problema è emerso subito dopo l'implementazione della funzionalità di logout forzato alla chiusura dell'app.
+-   **Status**: BLOCKED
+-   **Agent Testing Done**: N
+-   **Which testing method agent to use?**: backend testing agent
+-   **User Testing Done**: N
+
+**All Pending/In progress Issue list**:
+-   **Issue 1**: L'applicazione non si apre per l'utente (P0)
+
+**Issues Detail**:
+-   **Issue 1**:
+    -   **Attempted fixes**: L'agente precedente ha tentato di ispezionare i log di ,  e , ma non è riuscito a diagnosticare o risolvere il problema a causa delle continue interruzioni.
+    -   **Next debug checklist**:
+        1.  Controllare lo stato dei servizi con backend                          RUNNING   pid 47, uptime 0:00:05
+code-server                      STOPPED   Not started
+frontend                         STOPPED   Feb 21 09:39 PM
+mongodb                          RUNNING   pid 49, uptime 0:00:05
+nginx-code-proxy                 RUNNING   pid 43, uptime 0:00:05 per assicurarsi che backend e frontend siano in esecuzione.
+        2.  Ispezionare i log di errore del backend: INFO:     Started reloader process [174] using WatchFiles
+INFO:     Started server process [210]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [210]
+INFO:     Started server process [485]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [485]
+INFO:     Stopping reloader process [174]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [724] using WatchFiles
+INFO:     Started server process [726]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [46] using WatchFiles
+INFO:     Started server process [90]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [47] using WatchFiles
+INFO:     Started server process [91]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [91]
+INFO:     Started server process [982]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [982]
+INFO:     Started server process [1055]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1055]
+INFO:     Stopping reloader process [47]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [1240] using WatchFiles
+INFO:     Started server process [1242]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1242]
+INFO:     Started server process [4489]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4489]
+INFO:     Started server process [4562]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4562]
+INFO:     Stopping reloader process [1240]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [4701] using WatchFiles
+INFO:     Started server process [4703]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4703]
+INFO:     Started server process [5006]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5006]
+INFO:     Stopping reloader process [4701]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [5011] using WatchFiles
+INFO:     Started server process [5013]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5013]
+INFO:     Started server process [5231]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5231]
+INFO:     Stopping reloader process [5011]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [5236] using WatchFiles
+INFO:     Started server process [5238]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5238]
+INFO:     Started server process [5744]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5744]
+INFO:     Stopping reloader process [5236]
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [5780] using WatchFiles
+INFO:     Started server process [5782]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [43] using WatchFiles
+INFO:     Started server process [86]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [47] using WatchFiles
+INFO:     Started server process [91]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:371: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  decoded = self.decode_complete(
+/root/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:153: InsecureKeyLengthWarning: The HMAC key is 28 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+  return self._jws.encode(
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [47] using WatchFiles
+INFO:     Started server process [90]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete..
+        3.  Ispezionare i log di errore del frontend: (node:85) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:85) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:219) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:219) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:749) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:749) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:82) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:82) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:82) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:82) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3217) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3217) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3748) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3748) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3976) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3976) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:78) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:78) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:75) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:75) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option..
+        4.  Il problema è probabilmente legato all'ultima modifica: il logout forzato. Controllare il file . L'errore potrebbe essere causato dal tentativo di leggere una proprietà da un oggetto  nullo all'avvio dell'app, dopo che il  è stato cancellato. È necessario aggiungere un controllo per verificare se l'utente esiste prima di accedere alle sue proprietà.
+    -   **Why fix this issue and what will be achieved with the fix?**: L'app è completamente inutilizzabile. La risoluzione di questo problema è fondamentale per ripristinare la funzionalità di base.
+    -   **Status**: IN PROGRESS
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: Both
+    -   **Blocked on other issue**: None
+
+**In progress Task List**:
+-   Nessuno. L'obiettivo principale è la risoluzione del bug critico.
+
+**Upcoming and Future Tasks**
+-   Nessuna nuova richiesta di funzionalità da parte dell'utente. Il focus è ripristinare la funzionalità dell'app.
+
+**Completed work in this session**
+-   **Creazione dell'app**: Sviluppo completo dell'app BaristaShift con backend e frontend.
+-   **Popolamento Dati**: Aggiunta di numerose voci specifiche alle categorie della checklist (Carichi, Pulizie, Ordini, ecc.).
+-   **Miglioramenti UI/UX**:
+    -   Correzione della navigazione su mobile per visualizzare correttamente tutte le voci del menu.
+    -   Aggiunta di una freccia di ritorno in tutte le pagine per tornare alla Dashboard.
+    -   Creazione e perfezionamento di un'icona personalizzata per l'app.
+    -   Rimozione del badge Made with Emergent tramite CSS.
+-   **Funzionalità Aggiunte**:
+    -   **Pianificazione Turni**: Sezione Turni con calendario mensile, gestione e visualizzazione degli orari.
+    -   **Segnalazione Problemi**: Sezione Problemi per segnalare guasti, con contatti diretti per l'assistenza e gestione delle attrezzature.
+    -   **Logout Forzato**: Implementata la disconnessione automatica alla chiusura dell'app.
+-   **Bug Fixes**:
+    -   Correzione del flusso di segnalazione problemi e dei link di contatto (WhatsApp).
+    -   Riorganizzazione delle voci della checklist e rinomina delle categorie come richiesto.
+    -   Risoluzione di problemi di navigazione nella sezione Turni.
+
+**Earlier issues found/mentioned but not fixed**
+-   I log di deploy (messaggio 487) hanno mostrato un errore di autenticazione MongoDB durante la migrazione su Atlas (). Sebbene l'app abbia funzionato per molto tempo dopo, questo potrebbe indicare una configurazione fragile. Tuttavia, il problema attuale sembra più probabilmente legato al codice frontend.
+
+**Known issue recurrence from previous fork**
+-   N/A
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+-   **Backend**: FastAPI, MongoDB (con ), autenticazione JWT.
+-   **Frontend**: React, Tailwind CSS, , , .
+-   **State Management**: React Hooks (, , ).
+
+**key DB schema**
+-   **users**: {username, pin, role}
+-   **categories**: {name, icon}
+-   **items**: {name, category_id}
+-   **scheduled_shifts**: {user_id, start, end, title}
+-   **problem_reports**: {equipment_name, description, priority, status, contact_phone, contact_whatsapp, contact_email}
+-   **equipments**: {name, type, contact_name, contact_phone, contact_whatsapp, contact_email}
+
+**changes in tech stack**
+-   Nessuno.
+
+**All files of reference**
+-   : Contiene tutte le logiche del backend e gli endpoint API.
+-   : Componente principale di React, gestisce il routing e lo stato di autenticazione globale. È stato modificato per ultimo per forzare il logout ed è la causa più probabile del bug attuale.
+-   : Modificato per migliorare la visualizzazione su mobile.
+-   : Contiene la logica per la segnalazione dei problemi.
+-   : Contiene il calendario dei turni.
+-   : Contiene la configurazione dell'icona dell'app.
+
+**Areas that need refactoring**:
+-   Il file  è diventato monolitico. Potrebbe essere suddiviso in moduli (router, modelli, servizi) per migliorare la manutenibilità.
+-   Il componente  è complesso e potrebbe essere scomposto in componenti più piccoli.
+
+**key api endpoints**
+-   
+-   ,  (CRUD)
+-    (CRUD)
+-    (CRUD)
+-    (CRUD)
+
+**Critical Info for New Agent**
+-   **L'utente parla italiano. Tutta la comunicazione deve essere in italiano.**
+-   L'utente è impaziente e si aspetta risposte rapide. Evita lunghe pause.
+-   **Il bug più critico è che l'app non si apre.** La causa più probabile è l'implementazione del logout forzato nel file . Probabilmente il codice tenta di accedere a una proprietà dell'oggetto  quando questo è  all'avvio. Inizia l'indagine da lì.
+
+**documents and test reports created in this job**
+-   Nessuno.
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.  **Richiesta link (FALLITA)**: L'utente pensa che l'app sia stata cancellata e chiede il link.
+2.  **Richiesta fix UI (COMPLETATA)**: Chiede che la voce Gestione sia visibile in verticale.
+3.  **Impazienza**: L'utente sollecita l'agente.
+4.  **Impazienza**: L'utente sollecita l'agente.
+5.  **Impazienza**: L'utente sollecita l'agente.
+6.  **Richiesta fix Navigazione (COMPLETATA)**: Chiede una freccia per tornare indietro nella sezione Turni.
+7.  **Estensione richiesta (COMPLETATA)**: Vuole la freccia di ritorno su tutte le pagine.
+8.  **Richiesta fix Segnalazioni (COMPLETATA)**: Chiede di sistemare l'invio delle segnalazioni.
+9.  **Richiesta Logout Forzato (COMPLETATA, CAUSA BUG)**: Chiede che l'app richieda il login a ogni apertura.
+10. **Richiesta link (PENDENTE)**: L'utente chiede di nuovo il link.
+
+**Project Health Check:**
+-   **Broken**: L'applicazione non si carica, rendendola inutilizzabile.
+
+**3rd Party Integrations**
+-   Nessuna.
+
+**Testing status**
+-   **Testing agent used after significant changes**: NO
+-   **Troubleshoot agent used after agent stuck in loop**: NO
+-   **Test files created**: []
+-   **Known regressions**: L'intera applicazione non si avvia.
+
+**Credentials to test flow:**
+-   **Manager**: username , PIN 
+-   **Barista**: username , PIN 
+
+**What agent forgot to execute**
+L'agente non è riuscito a completare il debug del problema critico per cui l'app non si avvia, a causa delle continue interruzioni da parte dell'utente. Non è stata identificata la causa principale né è stata implementata una soluzione.</analysis>
