@@ -8,6 +8,7 @@ import {
   Boxes,
   Wallet,
   Thermometer,
+  Wrench,
   Plus,
   Pencil,
   Trash2,
