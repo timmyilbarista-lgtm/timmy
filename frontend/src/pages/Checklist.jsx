@@ -510,18 +510,19 @@ const Checklist = () => {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </SortableItem>
               );
             })}
-          </AnimatePresence>
 
-          {filteredItems.length === 0 && (
-            <div className="empty-state py-12">
-              <Circle className="empty-state-icon" />
-              <p className="text-muted-foreground">Nessuna attivita in questa categoria</p>
-            </div>
-          )}
-        </div>
+            {filteredItems.length === 0 && (
+              <div className="empty-state py-12">
+                <Circle className="empty-state-icon" />
+                <p className="text-muted-foreground">Nessuna attivita in questa categoria</p>
+              </div>
+            )}
+          </div>
+        </SortableContext>
+      </DndContext>
       )}
 
       {/* Note Dialog */}
