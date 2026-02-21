@@ -1,0 +1,164 @@
+{
+  "timestamp": "2026-02-21T10:29:37.878204",
+  "total_tests": 26,
+  "passed_tests": 26,
+  "success_rate": 100.0,
+  "results": [
+    {
+      "test": "API Health Check",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:34.756284"
+    },
+    {
+      "test": "Seed Data",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:34.884087"
+    },
+    {
+      "test": "Login Manager (manager)",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:35.212662"
+    },
+    {
+      "test": "Login Barista (barista)",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:35.558531"
+    },
+    {
+      "test": "Get Manager Profile",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:35.656421"
+    },
+    {
+      "test": "Get Barista Profile",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:35.743681"
+    },
+    {
+      "test": "Barista Authorization Block",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:35.867239"
+    },
+    {
+      "test": "Get Categories",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.001929"
+    },
+    {
+      "test": "Create Category",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.131395"
+    },
+    {
+      "test": "Update Category",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.225746"
+    },
+    {
+      "test": "Delete Category",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.326560"
+    },
+    {
+      "test": "Get Checklist Items",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.426302"
+    },
+    {
+      "test": "GET categories",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.527554"
+    },
+    {
+      "test": "Create Checklist Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.635185"
+    },
+    {
+      "test": "Update Checklist Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.756672"
+    },
+    {
+      "test": "Delete Checklist Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.849100"
+    },
+    {
+      "test": "Get Current Shift",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:36.949094"
+    },
+    {
+      "test": "Create Shift",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.081889"
+    },
+    {
+      "test": "Get Current Shift with Completions",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.177342"
+    },
+    {
+      "test": "Complete Checklist Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.270149"
+    },
+    {
+      "test": "Close Shift",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.369475"
+    },
+    {
+      "test": "Create Note",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.475811"
+    },
+    {
+      "test": "Get Shift Notes",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.576136"
+    },
+    {
+      "test": "Delete Note",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.674309"
+    },
+    {
+      "test": "Get Shift History",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.764074"
+    },
+    {
+      "test": "Get Filtered Shift History",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-21T10:29:37.877492"
+    }
+  ]
+}
