@@ -48,7 +48,7 @@ const Landing = () => {
       {/* Features */}
       <div className="max-w-4xl mx-auto px-6 py-16">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-          Cosa può fare per il tuo bar
+          Tutto quello che serve al tuo bar
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
           {features.map((feature, i) => (
