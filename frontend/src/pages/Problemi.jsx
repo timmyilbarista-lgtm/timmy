@@ -142,6 +142,23 @@ const Problemi = () => {
       let res;
       let contactInfo = null;
       
+      // Edit mode
+      if (reportDialog.problem) {
+        await api.put(`/problems/${reportDialog.problem.id}`, {
+          equipment_name: reportForm.equipment_name_manual || undefined,
+          description: reportForm.description,
+          priority: reportForm.priority,
+          contact_phone: reportForm.contact_phone,
+          contact_email: reportForm.contact_email,
+          contact_whatsapp: reportForm.contact_whatsapp
+        });
+        toast.success("Segnalazione modificata!");
+        setReportDialog({ open: false, problem: null });
+        fetchData();
+        return;
+      }
+      
+      // New mode
       if (reportForm.equipment_id) {
         // Use existing equipment
         res = await api.post("/problems", {
