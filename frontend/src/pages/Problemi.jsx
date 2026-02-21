@@ -133,24 +133,30 @@ const Problemi = () => {
   };
 
   const submitReport = async () => {
-    if ((!reportForm.equipment_id && !reportForm.equipment_name_manual) || !reportForm.description) {
-      toast.error("Inserisci attrezzatura e descrivi il problema");
+    const equipmentName = reportForm.equipment_name_manual?.trim() || "";
+    const description = reportForm.description?.trim() || "";
+    
+    if (!equipmentName && !reportForm.equipment_id) {
+      toast.error("Inserisci il nome dell'attrezzatura");
+      return;
+    }
+    if (!description) {
+      toast.error("Inserisci la descrizione del problema");
       return;
     }
     
     try {
-      let res;
       let contactInfo = null;
       
       // Edit mode
       if (reportDialog.problem) {
         await api.put(`/problems/${reportDialog.problem.id}`, {
-          equipment_name: reportForm.equipment_name_manual || undefined,
-          description: reportForm.description,
-          priority: reportForm.priority,
-          contact_phone: reportForm.contact_phone,
-          contact_email: reportForm.contact_email,
-          contact_whatsapp: reportForm.contact_whatsapp
+          equipment_name: equipmentName || undefined,
+          description: description,
+          priority: reportForm.priority || "medium",
+          contact_phone: reportForm.contact_phone || "",
+          contact_email: reportForm.contact_email || "",
+          contact_whatsapp: reportForm.contact_whatsapp || ""
         });
         toast.success("Segnalazione modificata!");
         setReportDialog({ open: false, problem: null });
@@ -158,40 +164,24 @@ const Problemi = () => {
         return;
       }
       
-      // New mode
-      if (reportForm.equipment_id) {
-        // Use existing equipment
-        res = await api.post("/problems", {
-          equipment_id: reportForm.equipment_id,
-          description: reportForm.description,
-          priority: reportForm.priority
-        });
-        
-        // Get contact from equipment
-        const eq = equipment.find(e => e.id === reportForm.equipment_id);
-        if (eq && (eq.contact_phone || eq.contact_email || eq.contact_whatsapp)) {
-          contactInfo = eq;
-        }
-      } else {
-        // Create manual report with contacts
-        res = await api.post("/problems/manual", {
-          equipment_name: reportForm.equipment_name_manual,
-          description: reportForm.description,
-          priority: reportForm.priority,
-          contact_phone: reportForm.contact_phone,
-          contact_email: reportForm.contact_email,
-          contact_whatsapp: reportForm.contact_whatsapp
-        });
-        
-        // Use manual contacts
-        if (reportForm.contact_phone || reportForm.contact_email || reportForm.contact_whatsapp) {
-          contactInfo = {
-            name: "Contatto inserito",
-            contact_phone: reportForm.contact_phone,
-            contact_email: reportForm.contact_email,
-            contact_whatsapp: reportForm.contact_whatsapp
-          };
-        }
+      // New mode - always use manual endpoint for simplicity
+      await api.post("/problems/manual", {
+        equipment_name: equipmentName,
+        description: description,
+        priority: reportForm.priority || "medium",
+        contact_phone: reportForm.contact_phone || "",
+        contact_email: reportForm.contact_email || "",
+        contact_whatsapp: reportForm.contact_whatsapp || ""
+      });
+      
+      // Use manual contacts
+      if (reportForm.contact_phone || reportForm.contact_email || reportForm.contact_whatsapp) {
+        contactInfo = {
+          name: "Contatto inserito",
+          contact_phone: reportForm.contact_phone || "",
+          contact_email: reportForm.contact_email || "",
+          contact_whatsapp: reportForm.contact_whatsapp || ""
+        };
       }
       
       toast.success("Problema segnalato!");
@@ -204,8 +194,7 @@ const Problemi = () => {
       
       fetchData();
     } catch (error) {
-      console.error("Errore segnalazione:", error);
-      toast.error(error.response?.data?.detail || "Errore nella segnalazione");
+      console.error("Errore:", error);
     }
   };
 
