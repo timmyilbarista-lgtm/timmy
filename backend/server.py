@@ -469,6 +469,97 @@ async def delete_note(note_id: str, user: dict = Depends(get_current_user)):
     await db.notes.delete_one({"id": note_id})
     return {"success": True}
 
+# ============== WORK SCHEDULE ENDPOINTS ==============
+
+@api_router.get("/work-schedules")
+async def get_work_schedules(
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    user_id: Optional[str] = None,
+    user: dict = Depends(get_current_user)
+):
+    query = {}
+    if start_date and end_date:
+        query["date"] = {"$gte": start_date, "$lte": end_date}
+    elif start_date:
+        query["date"] = {"$gte": start_date}
+    elif end_date:
+        query["date"] = {"$lte": end_date}
+    
+    if user_id:
+        query["user_id"] = user_id
+    
+    schedules = await db.work_schedules.find(query, {"_id": 0}).sort("date", 1).to_list(500)
+    return schedules
+
+@api_router.get("/work-schedules/week/{date}")
+async def get_week_schedules(date: str, user: dict = Depends(get_current_user)):
+    # Get schedules for the week containing the given date
+    from datetime import timedelta
+    target_date = datetime.strptime(date, "%Y-%m-%d")
+    # Find Monday of that week
+    monday = target_date - timedelta(days=target_date.weekday())
+    sunday = monday + timedelta(days=6)
+    
+    start_date = monday.strftime("%Y-%m-%d")
+    end_date = sunday.strftime("%Y-%m-%d")
+    
+    schedules = await db.work_schedules.find(
+        {"date": {"$gte": start_date, "$lte": end_date}},
+        {"_id": 0}
+    ).sort([("date", 1), ("start_time", 1)]).to_list(500)
+    
+    return {
+        "week_start": start_date,
+        "week_end": end_date,
+        "schedules": schedules
+    }
+
+@api_router.post("/work-schedules")
+async def create_work_schedule(data: WorkScheduleCreate, user: dict = Depends(require_manager)):
+    # Get user name
+    target_user = await db.users.find_one({"id": data.user_id}, {"_id": 0})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    schedule = WorkScheduleBase(
+        user_id=data.user_id,
+        user_name=target_user["name"],
+        date=data.date,
+        start_time=data.start_time,
+        end_time=data.end_time,
+        notes=data.notes,
+        created_by=user["id"]
+    )
+    doc = schedule.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.work_schedules.insert_one(doc)
+    
+    return {
+        "id": schedule.id,
+        "user_id": schedule.user_id,
+        "user_name": schedule.user_name,
+        "date": schedule.date,
+        "start_time": schedule.start_time,
+        "end_time": schedule.end_time
+    }
+
+@api_router.put("/work-schedules/{schedule_id}")
+async def update_work_schedule(schedule_id: str, data: WorkScheduleUpdate, user: dict = Depends(require_manager)):
+    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = await db.work_schedules.update_one({"id": schedule_id}, {"$set": update_data})
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    return {"success": True}
+
+@api_router.delete("/work-schedules/{schedule_id}")
+async def delete_work_schedule(schedule_id: str, user: dict = Depends(require_manager)):
+    await db.work_schedules.delete_one({"id": schedule_id})
+    return {"success": True}
+
 # ============== SEED DATA ==============
 
 @api_router.post("/seed")
