@@ -121,7 +121,7 @@ const Problemi = () => {
   return (
     <div className="p-4 md:p-8 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="font-heading text-2xl font-bold">Problemi</h1>
+        <div className="flex items-center gap-2"><Link to="/"><Button variant="ghost" size="icon"><ArrowLeft className="w-5 h-5"/></Button></Link><h1 className="font-heading text-2xl font-bold">Problemi</h1></div>
         <Button onClick={openNew} className="bg-red-600"><AlertTriangle className="w-4 h-4 mr-2"/>Segnala</Button>
       </div>
 

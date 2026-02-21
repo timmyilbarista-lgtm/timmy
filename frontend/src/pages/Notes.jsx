@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { StickyNote, Send, Trash2, Clock, User, Coffee } from "lucide-react";
@@ -119,7 +120,7 @@ const Notes = () => {
     <div className="p-6 md:p-8 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="font-heading text-2xl md:text-3xl font-bold">Note Turno</h1>
+        <div className="flex items-center gap-2"><Link to="/"><Button variant="ghost" size="icon"><ChevronLeft className="w-5 h-5"/></Button></Link><h1 className="font-heading text-2xl md:text-3xl font-bold">Note Turno</h1></div>
         <p className="text-muted-foreground">
           Lascia messaggi per il turno successivo
         </p>
