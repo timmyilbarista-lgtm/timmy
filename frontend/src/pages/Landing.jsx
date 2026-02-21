@@ -21,12 +21,27 @@ const Landing = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200')] bg-cover bg-center opacity-20" />
         <div className="relative max-w-4xl mx-auto px-6 py-16 text-center">
           {/* Logo */}
-          <img 
-            src="https://customer-assets.emergentagent.com/job_78c4fd9d-22bd-4052-9fe1-72ca94f819a4/artifacts/925i7ml5_IMG_1461.jpeg" 
-            alt="Timmy Coffee Master" 
-            className="w-48 mx-auto mb-8"
-            style={{ background: 'transparent', mixBlendMode: 'lighten' }}
-          />
+          <div className="mb-8 text-center">
+            <h2 className="text-4xl font-bold tracking-wide" style={{ fontFamily: 'Georgia, serif', color: '#3d2314' }}>
+              TIMMY<span style={{ fontSize: '14px', verticalAlign: 'super' }}>®</span>
+            </h2>
+            <p className="text-sm tracking-[0.3em] font-medium" style={{ color: '#3d2314' }}>COFFEE MASTER</p>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#3d2314' }}></span>
+              <svg width="28" height="36" viewBox="0 0 28 36" fill="none" className="opacity-90">
+                <path d="M14 0C14 0 0 12 0 22C0 28 4 36 14 36C24 36 28 28 28 22C28 12 14 0 14 0Z" fill="url(#grain)"/>
+                <path d="M14 4C14 4 16 18 14 32" stroke="#3d2314" strokeWidth="1.5" fill="none"/>
+                <defs>
+                  <pattern id="grain" patternUnits="userSpaceOnUse" width="4" height="4">
+                    <circle cx="1" cy="1" r="0.5" fill="#8B7355"/>
+                    <circle cx="3" cy="3" r="0.5" fill="#6B5344"/>
+                    <circle cx="2" cy="2" r="0.3" fill="#9B8365"/>
+                  </pattern>
+                </defs>
+              </svg>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#3d2314' }}></span>
+            </div>
+          </div>
           
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             BaristaShift
