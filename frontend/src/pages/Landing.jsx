@@ -24,7 +24,8 @@ const Landing = () => {
           <img 
             src="https://customer-assets.emergentagent.com/job_78c4fd9d-22bd-4052-9fe1-72ca94f819a4/artifacts/925i7ml5_IMG_1461.jpeg" 
             alt="Timmy Coffee Master" 
-            className="w-48 mx-auto mb-8 rounded-2xl shadow-2xl"
+            className="w-48 mx-auto mb-8"
+            style={{ background: 'transparent', mixBlendMode: 'lighten' }}
           />
           
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
