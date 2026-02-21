@@ -703,6 +703,9 @@ class ManualProblemCreate(BaseModel):
     equipment_name: str
     description: str
     priority: str = "medium"
+    contact_phone: str = ""
+    contact_email: str = ""
+    contact_whatsapp: str = ""
 
 @api_router.post("/problems/manual")
 async def create_manual_problem(data: ManualProblemCreate, user: dict = Depends(get_current_user)):
@@ -716,6 +719,9 @@ async def create_manual_problem(data: ManualProblemCreate, user: dict = Depends(
     )
     doc = problem.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
+    doc['contact_phone'] = data.contact_phone
+    doc['contact_email'] = data.contact_email
+    doc['contact_whatsapp'] = data.contact_whatsapp
     if doc.get('resolved_at'):
         doc['resolved_at'] = doc['resolved_at'].isoformat()
     await db.problems.insert_one(doc)
