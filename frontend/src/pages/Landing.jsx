@@ -214,9 +214,12 @@ const Landing = () => {
           </a>
         </div>
 
-        <div className="inline-flex items-center gap-2 text-stone-500 text-sm">
-          <Coffee className="w-4 h-4" />
-          <span>Creato con passione da Timmy Coffee Master</span>
+        <div className="border-t border-stone-700 pt-8 mt-8">
+          <p className="text-stone-400 text-sm mb-1">Powered by Timmy | Coffee Master</p>
+          <a href="https://www.artedelcaffe.it" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:text-amber-300 text-sm">
+            www.artedelcaffe.it
+          </a>
+          <p className="text-stone-500 text-xs mt-2">© 2025 Tutti i diritti riservati</p>
         </div>
       </div>
     </div>
