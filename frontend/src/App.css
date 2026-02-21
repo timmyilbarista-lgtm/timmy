@@ -1,34 +1,154 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* BaristaShift App Styles */
+
+/* Sidebar active state */
+.nav-item-active {
+  @apply bg-secondary text-secondary-foreground;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Touch-friendly tap targets */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Category card styles */
+.category-card {
+  @apply relative overflow-hidden transition-all duration-300;
 }
 
-.App-link {
-    color: #61dafb;
+.category-card::before {
+  content: '';
+  @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+  background: linear-gradient(135deg, rgba(217, 142, 69, 0.1) 0%, transparent 100%);
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.category-card:hover::before {
+  @apply opacity-100;
+}
+
+/* Completion badge pulse animation */
+.completion-badge {
+  @apply relative;
+}
+
+.completion-badge::after {
+  content: '';
+  @apply absolute inset-0 rounded-full animate-ping;
+  animation-duration: 2s;
+  animation-iteration-count: 3;
+}
+
+.completion-badge.complete::after {
+  @apply bg-success/30;
+}
+
+.completion-badge.incomplete::after {
+  @apply bg-destructive/30;
+}
+
+/* Progress bar animation */
+.progress-fill {
+  @apply transition-all duration-500 ease-out;
+}
+
+/* Card entrance animations */
+.card-enter {
+  @apply opacity-0 translate-y-4;
+  animation: cardEnter 0.4s ease-out forwards;
+}
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Checklist item states */
+.checklist-item {
+  @apply transition-all duration-200;
+}
+
+.checklist-item:active {
+  @apply scale-[0.98];
+}
+
+/* Sticky note effect */
+.note-card {
+  @apply relative;
+  transform: rotate(-1deg);
+}
+
+.note-card:nth-child(even) {
+  transform: rotate(1deg);
+}
+
+.note-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Glass morphism sidebar */
+.sidebar-glass {
+  @apply backdrop-blur-xl bg-card/80;
+}
+
+/* Custom checkbox animation */
+.checkbox-custom {
+  @apply transition-all duration-200;
+}
+
+.checkbox-custom[data-state="checked"] {
+  animation: checkBounce 0.3s ease-out;
+}
+
+@keyframes checkBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Tablet-optimized grid */
+@media (min-width: 768px) {
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .bento-span-4 {
+    grid-column: span 4;
+  }
+  
+  .bento-span-6 {
+    grid-column: span 6;
+  }
+  
+  .bento-span-8 {
+    grid-column: span 8;
+  }
+  
+  .bento-span-12 {
+    grid-column: span 12;
+  }
+}
+
+/* Mobile bottom navigation */
+@media (max-width: 767px) {
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Loading skeleton */
+.skeleton-pulse {
+  @apply animate-pulse bg-muted rounded-lg;
+}
+
+/* Empty state illustration wrapper */
+.empty-state {
+  @apply flex flex-col items-center justify-center py-12 text-center;
+}
+
+.empty-state-icon {
+  @apply w-24 h-24 mb-6 text-muted-foreground/30;
 }
