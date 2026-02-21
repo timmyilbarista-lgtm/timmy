@@ -699,6 +699,33 @@ async def create_problem(data: ProblemReportCreate, user: dict = Depends(get_cur
         }
     }
 
+class ManualProblemCreate(BaseModel):
+    equipment_name: str
+    description: str
+    priority: str = "medium"
+
+@api_router.post("/problems/manual")
+async def create_manual_problem(data: ManualProblemCreate, user: dict = Depends(get_current_user)):
+    problem = ProblemReportBase(
+        equipment_id="manual",
+        equipment_name=data.equipment_name,
+        description=data.description,
+        priority=data.priority,
+        reported_by=user["id"],
+        reported_by_name=user["name"]
+    )
+    doc = problem.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('resolved_at'):
+        doc['resolved_at'] = doc['resolved_at'].isoformat()
+    await db.problems.insert_one(doc)
+    
+    return {
+        "id": problem.id,
+        "equipment_name": problem.equipment_name,
+        "description": problem.description
+    }
+
 @api_router.put("/problems/{problem_id}")
 async def update_problem(problem_id: str, data: ProblemReportUpdate, user: dict = Depends(get_current_user)):
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
