@@ -411,73 +411,74 @@ const Checklist = () => {
           })}
         </div>
       ) : (
-        /* Items List */
-        <div className="space-y-3">
-          <AnimatePresence mode="popLayout">
-            {filteredItems.map((item, index) => {
-              const completed = isItemCompleted(item.id);
-              const completion = getItemCompletion(item.id);
+        /* Items List with Drag & Drop */
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={filteredItems.map(i => i.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-3">
+              {filteredItems.map((item, index) => {
+                const completed = isItemCompleted(item.id);
+                const completion = getItemCompletion(item.id);
 
-              return (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Card
-                    className={`checklist-item transition-all duration-200 ${
-                      completed ? "checklist-item-complete" : "checklist-item-pending"
-                    }`}
-                  >
-                    <CardContent className="p-4 md:p-6">
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="flex items-center justify-center cursor-pointer touch-target"
-                          onClick={() => toggleItem(item.id, !completed)}
-                          data-testid={`checklist-item-toggle-${item.id}`}
-                        >
-                          <Checkbox
-                            checked={completed}
-                            className={`h-6 w-6 rounded-md checkbox-custom ${
-                              completed ? "bg-success border-success text-success-foreground" : ""
-                            }`}
-                          />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h3
-                            className={`font-medium text-lg ${
-                              completed ? "line-through text-muted-foreground" : ""
-                            }`}
+                return (
+                  <SortableItem key={item.id} item={item}>
+                    <Card
+                      className={`checklist-item transition-all duration-200 ${
+                        completed ? "checklist-item-complete" : "checklist-item-pending"
+                      }`}
+                    >
+                      <CardContent className="p-4 md:p-6">
+                        <div className="flex items-start gap-4">
+                          <div
+                            className="flex items-center justify-center cursor-pointer touch-target"
+                            onClick={() => toggleItem(item.id, !completed)}
+                            data-testid={`checklist-item-toggle-${item.id}`}
                           >
-                            {item.name}
-                          </h3>
-                          {item.description && (
-                            <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
-                          )}
+                            <Checkbox
+                              checked={completed}
+                              className={`h-6 w-6 rounded-md checkbox-custom ${
+                                completed ? "bg-success border-success text-success-foreground" : ""
+                              }`}
+                            />
+                          </div>
 
-                          {completion?.completed_by_name && (
-                            <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                              <User className="w-3 h-3" />
-                              <span>Completato da {completion.completed_by_name}</span>
-                            </div>
-                          )}
+                          <div className="flex-1 min-w-0">
+                            <h3
+                              className={`font-medium text-lg ${
+                                completed ? "line-through text-muted-foreground" : ""
+                              }`}
+                            >
+                              {item.name}
+                            </h3>
+                            {item.description && (
+                              <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                            )}
 
-                          {completion?.notes && (
-                            <div className="mt-2 p-2 bg-muted/50 rounded-lg text-sm">
-                              <MessageSquare className="w-3 h-3 inline-block mr-1" />
-                              {completion.notes}
-                            </div>
-                          )}
-                        </div>
+                            {completion?.completed_by_name && (
+                              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                                <User className="w-3 h-3" />
+                                <span>Completato da {completion.completed_by_name}</span>
+                              </div>
+                            )}
 
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setNoteDialog({ open: true, item, note: completion?.notes || "" })}
+                            {completion?.notes && (
+                              <div className="mt-2 p-2 bg-muted/50 rounded-lg text-sm">
+                                <MessageSquare className="w-3 h-3 inline-block mr-1" />
+                                {completion.notes}
+                              </div>
+                            )}
+                          </div>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setNoteDialog({ open: true, item, note: completion?.notes || "" })}
                           data-testid={`add-note-btn-${item.id}`}
                           className="shrink-0"
                         >
