@@ -103,7 +103,8 @@ const Problemi = () => {
 
   const openReportDialog = () => {
     setReportForm({
-      equipment_id: equipment[0]?.id || "",
+      equipment_id: "",
+      equipment_name_manual: "",
       description: "",
       priority: "medium"
     });
@@ -111,22 +112,37 @@ const Problemi = () => {
   };
 
   const submitReport = async () => {
-    if (!reportForm.equipment_id || !reportForm.description) {
-      toast.error("Seleziona attrezzatura e descrivi il problema");
+    if ((!reportForm.equipment_id && !reportForm.equipment_name_manual) || !reportForm.description) {
+      toast.error("Inserisci attrezzatura e descrivi il problema");
       return;
     }
     
     try {
-      const res = await api.post("/problems", reportForm);
-      toast.success("Problema segnalato!");
-      setReportDialog({ open: false });
-      
-      // Show contact info
-      if (res.data.contact && (res.data.contact.phone || res.data.contact.email)) {
-        const eq = equipment.find(e => e.id === reportForm.equipment_id);
-        setContactDialog({ open: true, equipment: eq });
+      let res;
+      if (reportForm.equipment_id) {
+        // Use existing equipment
+        res = await api.post("/problems", {
+          equipment_id: reportForm.equipment_id,
+          description: reportForm.description,
+          priority: reportForm.priority
+        });
+        
+        // Show contact info
+        if (res.data.contact && (res.data.contact.phone || res.data.contact.email)) {
+          const eq = equipment.find(e => e.id === reportForm.equipment_id);
+          setContactDialog({ open: true, equipment: eq });
+        }
+      } else {
+        // Create manual report
+        res = await api.post("/problems/manual", {
+          equipment_name: reportForm.equipment_name_manual,
+          description: reportForm.description,
+          priority: reportForm.priority
+        });
       }
       
+      toast.success("Problema segnalato!");
+      setReportDialog({ open: false });
       fetchData();
     } catch (error) {
       toast.error("Errore nella segnalazione");
