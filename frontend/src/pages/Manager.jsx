@@ -263,7 +263,11 @@ const Manager = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Card>
+                  <Card 
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => setSelectedCategoryId(selectedCategoryId === category.id ? null : category.id)}
+                    data-testid={`category-expand-${category.id}`}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
@@ -272,14 +276,14 @@ const Manager = () => {
                         <div className="flex-1">
                           <h3 className="font-semibold">{category.name}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {itemCount} attivita
+                            {itemCount} attivita - Tocca per vedere
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => openCategoryDialog(category)}
+                            onClick={(e) => { e.stopPropagation(); openCategoryDialog(category); }}
                             data-testid={`edit-category-${category.id}`}
                           >
                             <Pencil className="w-4 h-4" />
@@ -287,14 +291,67 @@ const Manager = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => setDeleteDialog({ open: true, type: "category", id: category.id })}
+                            onClick={(e) => { e.stopPropagation(); setDeleteDialog({ open: true, type: "category", id: category.id }); }}
                             data-testid={`delete-category-${category.id}`}
                             className="text-destructive hover:text-destructive"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
+                          <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform ${selectedCategoryId === category.id ? 'rotate-90' : ''}`} />
                         </div>
                       </div>
+
+                      {/* Expanded Items List */}
+                      {selectedCategoryId === category.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-4 pt-4 border-t border-border space-y-2"
+                        >
+                          {items.filter(i => i.category_id === category.id).map((item) => (
+                            <div key={item.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                              <div className="flex-1">
+                                <p className="font-medium">{item.name}</p>
+                                {item.description && (
+                                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                                )}
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => { e.stopPropagation(); openItemDialog(item); }}
+                                data-testid={`edit-item-inline-${item.id}`}
+                                className="text-accent"
+                              >
+                                <Pencil className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => { e.stopPropagation(); setDeleteDialog({ open: true, type: "item", id: item.id }); }}
+                                data-testid={`delete-item-inline-${item.id}`}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          ))}
+                          {items.filter(i => i.category_id === category.id).length === 0 && (
+                            <p className="text-sm text-muted-foreground text-center py-2">Nessuna voce in questa categoria</p>
+                          )}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => { e.stopPropagation(); setItemForm({...itemForm, category_id: category.id}); setItemDialog({ open: true, item: null }); }}
+                            className="w-full mt-2"
+                            data-testid={`add-item-to-${category.id}`}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Aggiungi voce a {category.name}
+                          </Button>
+                        </motion.div>
+                      )}
                     </CardContent>
                   </Card>
                 </motion.div>
