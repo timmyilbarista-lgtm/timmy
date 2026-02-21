@@ -466,20 +466,32 @@ const Problemi = () => {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>Attrezzatura</Label>
-              <Select
-                value={reportForm.equipment_id}
-                onValueChange={(value) => setReportForm({ ...reportForm, equipment_id: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleziona attrezzatura" />
-                </SelectTrigger>
-                <SelectContent>
-                  {equipment.map(eq => (
-                    <SelectItem key={eq.id} value={eq.id}>{eq.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input
+                value={reportForm.equipment_name_manual}
+                onChange={(e) => setReportForm({ ...reportForm, equipment_name_manual: e.target.value, equipment_id: "" })}
+                placeholder="Scrivi il nome dell'attrezzatura (es. Macchina Espresso)"
+              />
             </div>
+            
+            {equipment.length > 0 && (
+              <div className="space-y-2">
+                <Label className="text-muted-foreground text-sm">Oppure seleziona da lista</Label>
+                <Select
+                  value={reportForm.equipment_id}
+                  onValueChange={(value) => setReportForm({ ...reportForm, equipment_id: value, equipment_name_manual: "" })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleziona attrezzatura esistente" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {equipment.map(eq => (
+                      <SelectItem key={eq.id} value={eq.id}>{eq.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label>Descrizione problema</Label>
               <Textarea
