@@ -31,7 +31,7 @@ const Landing = () => {
             BaristaShift
           </h1>
           <p className="text-xl md:text-2xl text-amber-400 font-medium mb-6">
-            Gestione Completa del Tuo Bar in Un'App
+            Gestione completa del servizio nel tuo bar
           </p>
           <p className="text-lg text-stone-300 max-w-2xl mx-auto mb-8">
             Checklist servizio, pulizie, manutenzione attrezzature, emergenze con contatti rapidi e gestione turni. 
