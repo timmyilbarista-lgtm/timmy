@@ -31,11 +31,11 @@ const Landing = () => {
             BaristaShift
           </h1>
           <p className="text-xl md:text-2xl text-amber-400 font-medium mb-6">
-            L'App per Gestire i Cambi Turno nel Tuo Bar
+            Gestione Completa del Tuo Bar in Un'App
           </p>
           <p className="text-lg text-stone-300 max-w-2xl mx-auto mb-8">
-            Checklist digitale, gestione turni e segnalazione problemi. 
-            Tutto in un'app semplice pensata da un barista per i baristi.
+            Checklist servizio, pulizie, manutenzione attrezzature, emergenze con contatti rapidi e gestione turni. 
+            Tutto organizzato per far funzionare il tuo bar al meglio, ogni giorno.
           </p>
           
           <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-500/50 rounded-full px-6 py-3 mb-8">
