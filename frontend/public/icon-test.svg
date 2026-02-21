@@ -5,7 +5,10 @@
   <!-- Ombra sotto -->
   <ellipse cx="250" cy="395" rx="80" ry="12" fill="#D1D5DB" opacity="0.5"/>
   
-  <!-- Tazza cappuccino - PIU PICCOLA -->
+  <!-- Cerchio contorno attorno alla tazza -->
+  <ellipse cx="250" cy="290" rx="145" ry="110" stroke="#B5651D" stroke-width="15" fill="none"/>
+  
+  <!-- Tazza cappuccino -->
   <path d="M115 215 
            Q115 198 150 193
            L350 193
@@ -27,12 +30,6 @@
            Q106 255 123 215
            Z" fill="#CD853F" opacity="0.4"/>
   
-  <!-- Manico con attacco alto e basso -->
-  <path d="M385 230 
-           Q422 230 426 280
-           Q426 330 385 335" 
-           stroke="#B5651D" stroke-width="15" fill="none" stroke-linecap="round"/>
-  
   <!-- Schiuma latte azzurra -->
   <ellipse cx="252" cy="202" rx="120" ry="32" fill="#87CEEB"/>
   <circle cx="170" cy="185" r="28" fill="#87CEEB"/>
@@ -41,6 +38,6 @@
   <circle cx="212" cy="158" r="22" fill="#A7DFF0"/>
   <circle cx="288" cy="154" r="20" fill="#A7DFF0"/>
   
-  <!-- Lettera B bianca al centro -->
-  <text x="250" y="318" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  <!-- Lettera B bianca al centro - più in basso -->
+  <text x="250" y="335" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="white" text-anchor="middle">B</text>
 </svg>
