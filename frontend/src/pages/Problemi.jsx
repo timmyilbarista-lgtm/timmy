@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
-import { AlertTriangle, Phone, Mail, MessageCircle, Plus, CheckCircle2, Wrench, Send } from "lucide-react";
+import { AlertTriangle, Phone, Mail, MessageCircle, CheckCircle2, Send, Pencil, Trash2 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -17,6 +17,7 @@ const Problemi = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingProblem, setEditingProblem] = useState(null);
   const [form, setForm] = useState({ equipment: "", description: "", priority: "medium", phone: "", whatsapp: "", email: "" });
 
   useEffect(() => { fetchData(); }, []);
@@ -29,40 +30,89 @@ const Problemi = () => {
     setLoading(false);
   };
 
-  const openDialog = () => {
+  const openNew = () => {
+    setEditingProblem(null);
     setForm({ equipment: "", description: "", priority: "medium", phone: "", whatsapp: "", email: "" });
+    setDialogOpen(true);
+  };
+
+  const openEdit = (p) => {
+    setEditingProblem(p);
+    setForm({
+      equipment: p.equipment_name || "",
+      description: p.description || "",
+      priority: p.priority || "medium",
+      phone: p.contact_phone || "",
+      whatsapp: p.contact_whatsapp || "",
+      email: p.contact_email || ""
+    });
     setDialogOpen(true);
   };
 
   const save = async () => {
     if (!form.equipment || !form.description) {
       toast.error("Compila attrezzatura e descrizione");
-      return;
+      return false;
     }
     try {
-      await api.post("/problems/manual", {
-        equipment_name: form.equipment,
-        description: form.description,
-        priority: form.priority,
-        contact_phone: form.phone,
-        contact_email: form.email,
-        contact_whatsapp: form.whatsapp
-      });
-      toast.success("Segnalazione salvata!");
+      if (editingProblem) {
+        await api.put(`/problems/${editingProblem.id}`, {
+          equipment_name: form.equipment,
+          description: form.description,
+          priority: form.priority,
+          contact_phone: form.phone,
+          contact_email: form.email,
+          contact_whatsapp: form.whatsapp
+        });
+        toast.success("Modificato!");
+      } else {
+        await api.post("/problems/manual", {
+          equipment_name: form.equipment,
+          description: form.description,
+          priority: form.priority,
+          contact_phone: form.phone,
+          contact_email: form.email,
+          contact_whatsapp: form.whatsapp
+        });
+        toast.success("Salvato!");
+      }
       setDialogOpen(false);
       fetchData();
+      return true;
     } catch (e) {
       toast.error("Errore");
+      return false;
     }
   };
 
-  const saveAndCall = async () => { await save(); if(form.phone) window.location.href = `tel:${form.phone}`; };
-  const saveAndWhatsapp = async () => { await save(); if(form.whatsapp) window.open(`https://wa.me/${form.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent(form.description)}`, '_blank'); };
-  const saveAndEmail = async () => { await save(); if(form.email) window.location.href = `mailto:${form.email}?subject=${encodeURIComponent('Problema: '+form.equipment)}&body=${encodeURIComponent(form.description)}`; };
+  const doCall = () => {
+    if (form.phone) window.location.href = `tel:${form.phone}`;
+  };
+
+  const doWhatsapp = () => {
+    if (form.whatsapp) {
+      const num = form.whatsapp.replace(/\D/g, '');
+      const fullNum = num.startsWith('39') ? num : '39' + num;
+      const msg = encodeURIComponent(`Problema: ${form.equipment}\n${form.description}`);
+      window.open(`https://wa.me/${fullNum}?text=${msg}`, '_blank');
+    }
+  };
+
+  const doEmail = () => {
+    if (form.email) {
+      window.location.href = `mailto:${form.email}?subject=${encodeURIComponent('Problema: ' + form.equipment)}&body=${encodeURIComponent(form.description)}`;
+    }
+  };
 
   const resolve = async (id) => {
     await api.put(`/problems/${id}`, { status: "resolved" });
     toast.success("Risolto!");
+    fetchData();
+  };
+
+  const deleteProblem = async (id) => {
+    await api.delete(`/problems/${id}`);
+    toast.success("Eliminato!");
     fetchData();
   };
 
@@ -72,18 +122,31 @@ const Problemi = () => {
     <div className="p-4 md:p-8 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="font-heading text-2xl font-bold">Problemi</h1>
-        <Button onClick={openDialog} className="bg-red-600"><AlertTriangle className="w-4 h-4 mr-2"/>Segnala</Button>
+        <Button onClick={openNew} className="bg-red-600"><AlertTriangle className="w-4 h-4 mr-2"/>Segnala</Button>
       </div>
 
       {openProblems.map(p => (
         <Card key={p.id} className="border-l-4 border-l-red-500">
-          <CardContent className="p-4 flex justify-between items-start">
-            <div>
-              <p className="font-semibold">{p.equipment_name}</p>
-              <p className="text-sm">{p.description}</p>
-              <p className="text-xs text-muted-foreground">{p.reported_by_name} - {format(new Date(p.created_at), "dd/MM HH:mm")}</p>
+          <CardContent className="p-4">
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <p className="font-semibold">{p.equipment_name}</p>
+                <p className="text-sm">{p.description}</p>
+                <p className="text-xs text-muted-foreground mt-1">{p.reported_by_name} - {format(new Date(p.created_at), "dd/MM HH:mm")}</p>
+                {(p.contact_phone || p.contact_whatsapp || p.contact_email) && (
+                  <div className="flex gap-2 mt-2">
+                    {p.contact_phone && <a href={`tel:${p.contact_phone}`} className="text-green-600"><Phone className="w-5 h-5"/></a>}
+                    {p.contact_whatsapp && <a href={`https://wa.me/39${p.contact_whatsapp.replace(/\D/g,'')}`} target="_blank" className="text-green-500"><MessageCircle className="w-5 h-5"/></a>}
+                    {p.contact_email && <a href={`mailto:${p.contact_email}`} className="text-blue-600"><Mail className="w-5 h-5"/></a>}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <Button size="sm" variant="ghost" onClick={() => openEdit(p)}><Pencil className="w-4 h-4"/></Button>
+                <Button size="sm" variant="ghost" onClick={() => resolve(p.id)} className="text-green-600"><CheckCircle2 className="w-4 h-4"/></Button>
+                <Button size="sm" variant="ghost" onClick={() => deleteProblem(p.id)} className="text-red-600"><Trash2 className="w-4 h-4"/></Button>
+              </div>
             </div>
-            <Button size="sm" variant="outline" onClick={() => resolve(p.id)}><CheckCircle2 className="w-4 h-4 mr-1"/>Risolto</Button>
           </CardContent>
         </Card>
       ))}
@@ -92,10 +155,10 @@ const Problemi = () => {
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Segnala Problema</DialogTitle></DialogHeader>
-          <div className="space-y-4 py-4">
+          <DialogHeader><DialogTitle>{editingProblem ? "Modifica" : "Segnala Problema"}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-2">
             <div><Label>Attrezzatura</Label><Input value={form.equipment} onChange={e => setForm({...form, equipment: e.target.value})} placeholder="Es. Macchina Espresso"/></div>
-            <div><Label>Descrizione</Label><Textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} placeholder="Descrivi il problema" rows={3}/></div>
+            <div><Label>Descrizione</Label><Textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} placeholder="Descrivi il problema" rows={2}/></div>
             <div><Label>Priorità</Label>
               <Select value={form.priority} onValueChange={v => setForm({...form, priority: v})}>
                 <SelectTrigger><SelectValue/></SelectTrigger>
@@ -106,18 +169,18 @@ const Problemi = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="border-t pt-4 space-y-2">
-              <Label>Contatti (opzionale)</Label>
-              <div className="flex gap-2 items-center"><Phone className="w-4 h-4"/><Input value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Telefono"/></div>
-              <div className="flex gap-2 items-center"><MessageCircle className="w-4 h-4"/><Input value={form.whatsapp} onChange={e => setForm({...form, whatsapp: e.target.value})} placeholder="WhatsApp"/></div>
-              <div className="flex gap-2 items-center"><Mail className="w-4 h-4"/><Input value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="Email"/></div>
+            <div className="border-t pt-3 space-y-2">
+              <Label className="text-sm">Contatti (opzionale)</Label>
+              <div className="flex gap-2 items-center"><Phone className="w-4 h-4 shrink-0"/><Input value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Telefono"/></div>
+              <div className="flex gap-2 items-center"><MessageCircle className="w-4 h-4 shrink-0"/><Input value={form.whatsapp} onChange={e => setForm({...form, whatsapp: e.target.value})} placeholder="WhatsApp"/></div>
+              <div className="flex gap-2 items-center"><Mail className="w-4 h-4 shrink-0"/><Input value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="Email"/></div>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            {form.phone && <Button onClick={saveAndCall} className="bg-green-600 w-full"><Phone className="w-4 h-4 mr-2"/>Salva e Chiama</Button>}
-            {form.whatsapp && <Button onClick={saveAndWhatsapp} className="bg-green-500 w-full"><MessageCircle className="w-4 h-4 mr-2"/>Salva e WhatsApp</Button>}
-            {form.email && <Button onClick={saveAndEmail} className="bg-blue-600 w-full"><Mail className="w-4 h-4 mr-2"/>Salva e Email</Button>}
-            <Button onClick={save} className="w-full"><Send className="w-4 h-4 mr-2"/>Salva</Button>
+          <div className="flex flex-col gap-2 pt-2">
+            <Button onClick={async () => { if(await save()) doCall(); }} className="bg-green-600 w-full" disabled={!form.phone}><Phone className="w-4 h-4 mr-2"/>Salva e Chiama</Button>
+            <Button onClick={async () => { if(await save()) doWhatsapp(); }} className="bg-green-500 w-full" disabled={!form.whatsapp}><MessageCircle className="w-4 h-4 mr-2"/>Salva e WhatsApp</Button>
+            <Button onClick={async () => { if(await save()) doEmail(); }} className="bg-blue-600 w-full" disabled={!form.email}><Mail className="w-4 h-4 mr-2"/>Salva e Email</Button>
+            <Button onClick={save} variant="outline" className="w-full"><Send className="w-4 h-4 mr-2"/>Solo Salva</Button>
           </div>
         </DialogContent>
       </Dialog>
