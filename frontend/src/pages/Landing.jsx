@@ -8,10 +8,10 @@ const Landing = () => {
   const [showAndroid, setShowAndroid] = useState(false);
 
   const features = [
-    { icon: ClipboardCheck, title: "Checklist Turno", desc: "Mai più dimenticare un'attività durante il cambio turno" },
-    { icon: Users, title: "Gestione Staff", desc: "Calendario turni e assegnazione compiti" },
-    { icon: Bell, title: "Segnalazione Problemi", desc: "Report guasti con contatto diretto assistenza" },
-    { icon: Coffee, title: "Pensata per Baristi", desc: "Creata da un Coffee Master per i professionisti del caffè" },
+    { icon: ClipboardCheck, title: "Checklist Servizio", desc: "Carichi, preparazioni, controlli giornalieri - nulla viene dimenticato" },
+    { icon: Coffee, title: "Pulizie & Manutenzione", desc: "Traccia pulizie attrezzature, frigoriferi, macchine e manutenzioni programmate" },
+    { icon: Bell, title: "Emergenze & Contatti", desc: "Guasti? Un tap per chiamare il tecnico, inviare WhatsApp o email" },
+    { icon: Users, title: "Gestione Turni & Staff", desc: "Calendario turni, passaggio consegne e note tra colleghi" },
   ];
 
   return (
