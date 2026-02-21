@@ -525,9 +525,10 @@ const Problemi = () => {
                 value={reportForm.description}
                 onChange={(e) => setReportForm({ ...reportForm, description: e.target.value })}
                 placeholder="Descrivi il problema..."
-                rows={4}
+                rows={3}
               />
             </div>
+            
             <div className="space-y-2">
               <Label>Priorità</Label>
               <Select
@@ -544,6 +545,39 @@ const Problemi = () => {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Contatti manuali */}
+            {!reportForm.equipment_id && (
+              <div className="border-t pt-4 space-y-3">
+                <Label className="text-sm font-medium">Contatti fornitore/tecnico (opzionale)</Label>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <Input
+                      value={reportForm.contact_phone}
+                      onChange={(e) => setReportForm({ ...reportForm, contact_phone: e.target.value })}
+                      placeholder="Numero telefono"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4 text-muted-foreground" />
+                    <Input
+                      value={reportForm.contact_whatsapp}
+                      onChange={(e) => setReportForm({ ...reportForm, contact_whatsapp: e.target.value })}
+                      placeholder="WhatsApp (es. +39 333 1234567)"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <Input
+                      value={reportForm.contact_email}
+                      onChange={(e) => setReportForm({ ...reportForm, contact_email: e.target.value })}
+                      placeholder="Email"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setReportDialog({ open: false })}>
