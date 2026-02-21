@@ -134,6 +134,32 @@ class NoteCreate(BaseModel):
     shift_id: str
     content: str
 
+# ============== WORK SCHEDULE MODELS ==============
+
+class WorkScheduleBase(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    user_name: str
+    date: str  # YYYY-MM-DD
+    start_time: str  # HH:MM
+    end_time: str  # HH:MM
+    notes: str = ""
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class WorkScheduleCreate(BaseModel):
+    user_id: str
+    date: str
+    start_time: str
+    end_time: str
+    notes: str = ""
+
+class WorkScheduleUpdate(BaseModel):
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
+    notes: Optional[str] = None
+
 # ============== HELPERS ==============
 
 def hash_pin(pin: str) -> str:
