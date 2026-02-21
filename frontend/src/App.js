@@ -53,6 +53,7 @@ function AppRoutes() {
         <Route path="checklist" element={<Checklist />} />
         <Route path="checklist/:categoryId" element={<Checklist />} />
         <Route path="turni" element={<Turni />} />
+        <Route path="problemi" element={<Problemi />} />
         <Route path="notes" element={<Notes />} />
         <Route path="history" element={<History />} />
         <Route
