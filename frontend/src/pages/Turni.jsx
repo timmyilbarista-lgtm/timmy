@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
-import { format, addDays, startOfWeek, parseISO } from "date-fns";
+import { format, addDays, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths } from "date-fns";
 import { it } from "date-fns/locale";
 import { useAuth } from "../context/AuthContext";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
   Plus,
   Clock,
-  User,
   Pencil,
   Trash2,
-  Users
+  Users,
+  Copy,
+  Calendar as CalendarIcon,
+  List
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
@@ -46,20 +47,23 @@ import {
 import { toast } from "sonner";
 import api from "../lib/api";
 
-const DAYS = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+const DAYS_SHORT = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 
 const Turni = () => {
   const { user } = useAuth();
-  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
-    const today = new Date();
-    return startOfWeek(today, { weekStartsOn: 1 }); // Monday
-  });
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [schedules, setSchedules] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("month"); // month or week
   
   const [scheduleDialog, setScheduleDialog] = useState({ open: false, schedule: null });
   const [deleteDialog, setDeleteDialog] = useState({ open: false, schedule: null });
+  const [dayDialog, setDayDialog] = useState({ open: false, date: null });
+  const [copyDialog, setCopyDialog] = useState({ open: false });
+  const [copyFromWeek, setCopyFromWeek] = useState("");
+  
   const [scheduleForm, setScheduleForm] = useState({
     user_id: "",
     date: "",
@@ -72,17 +76,19 @@ const Turni = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentWeekStart]);
+  }, [currentMonth]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const dateStr = format(currentWeekStart, "yyyy-MM-dd");
+      const start = format(startOfMonth(currentMonth), "yyyy-MM-dd");
+      const end = format(endOfMonth(currentMonth), "yyyy-MM-dd");
+      
       const [schedulesRes, usersRes] = await Promise.all([
-        api.get(`/work-schedules/week/${dateStr}`),
+        api.get(`/work-schedules?start_date=${start}&end_date=${end}`),
         api.get("/users")
       ]);
-      setSchedules(schedulesRes.data.schedules);
+      setSchedules(schedulesRes.data);
       setUsers(usersRes.data);
     } catch (error) {
       toast.error("Errore nel caricamento dei turni");
@@ -91,39 +97,54 @@ const Turni = () => {
     }
   };
 
-  const goToPreviousWeek = () => {
-    setCurrentWeekStart(prev => addDays(prev, -7));
-  };
-
-  const goToNextWeek = () => {
-    setCurrentWeekStart(prev => addDays(prev, 7));
-  };
-
+  const goToPreviousMonth = () => setCurrentMonth(prev => subMonths(prev, 1));
+  const goToNextMonth = () => setCurrentMonth(prev => addMonths(prev, 1));
   const goToToday = () => {
-    setCurrentWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }));
+    setCurrentMonth(new Date());
+    setSelectedDate(new Date());
   };
 
-  const getWeekDates = () => {
-    return DAYS.map((day, index) => ({
-      name: day,
-      date: addDays(currentWeekStart, index),
-      dateStr: format(addDays(currentWeekStart, index), "yyyy-MM-dd")
-    }));
+  const getMonthDays = () => {
+    const start = startOfMonth(currentMonth);
+    const end = endOfMonth(currentMonth);
+    const days = eachDayOfInterval({ start, end });
+    
+    // Add padding for first week
+    const firstDayOfWeek = start.getDay();
+    const paddingDays = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+    
+    const paddedDays = [];
+    for (let i = paddingDays; i > 0; i--) {
+      paddedDays.push({ date: addDays(start, -i), isCurrentMonth: false });
+    }
+    
+    days.forEach(day => {
+      paddedDays.push({ date: day, isCurrentMonth: true });
+    });
+    
+    return paddedDays;
   };
 
-  const getSchedulesForDay = (dateStr) => {
+  const getSchedulesForDay = (date) => {
+    const dateStr = format(date, "yyyy-MM-dd");
     return schedules.filter(s => s.date === dateStr);
   };
 
-  const openAddDialog = (dateStr) => {
+  const openDayDialog = (date) => {
+    setSelectedDate(date);
+    setDayDialog({ open: true, date });
+  };
+
+  const openAddDialog = (date) => {
     setScheduleForm({
       user_id: users[0]?.id || "",
-      date: dateStr,
+      date: format(date, "yyyy-MM-dd"),
       start_time: "08:00",
       end_time: "16:00",
       notes: ""
     });
     setScheduleDialog({ open: true, schedule: null });
+    setDayDialog({ open: false, date: null });
   };
 
   const openEditDialog = (schedule) => {
@@ -174,164 +195,233 @@ const Turni = () => {
     }
   };
 
-  const weekDates = getWeekDates();
-  const isCurrentWeek = format(currentWeekStart, "yyyy-MM-dd") === format(startOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd");
+  const copyWeekSchedules = async () => {
+    if (!copyFromWeek) {
+      toast.error("Seleziona una settimana da copiare");
+      return;
+    }
+    
+    try {
+      // Get schedules from source week
+      const sourceDate = new Date(copyFromWeek);
+      const sourceStart = format(startOfWeek(sourceDate, { weekStartsOn: 1 }), "yyyy-MM-dd");
+      const sourceEnd = format(addDays(startOfWeek(sourceDate, { weekStartsOn: 1 }), 6), "yyyy-MM-dd");
+      
+      const sourceSchedules = await api.get(`/work-schedules?start_date=${sourceStart}&end_date=${sourceEnd}`);
+      
+      // Calculate target week (current week)
+      const targetStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+      
+      // Copy each schedule to target week
+      for (const schedule of sourceSchedules.data) {
+        const sourceDayOfWeek = new Date(schedule.date).getDay();
+        const adjustedDay = sourceDayOfWeek === 0 ? 6 : sourceDayOfWeek - 1;
+        const targetDate = format(addDays(targetStart, adjustedDay), "yyyy-MM-dd");
+        
+        await api.post("/work-schedules", {
+          user_id: schedule.user_id,
+          date: targetDate,
+          start_time: schedule.start_time,
+          end_time: schedule.end_time,
+          notes: schedule.notes
+        });
+      }
+      
+      toast.success(`${sourceSchedules.data.length} turni copiati!`);
+      setCopyDialog({ open: false });
+      fetchData();
+    } catch (error) {
+      toast.error("Errore nella copia dei turni");
+    }
+  };
+
+  const monthDays = getMonthDays();
+  const isToday = (date) => isSameDay(date, new Date());
+
+  // Get user color based on index
+  const getUserColor = (userId) => {
+    const index = users.findIndex(u => u.id === userId);
+    const colors = ["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-orange-500", "bg-pink-500", "bg-teal-500"];
+    return colors[index % colors.length];
+  };
 
   return (
-    <div className="p-6 md:p-8 space-y-6">
+    <div className="p-4 md:p-8 space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold">Turni Settimanali</h1>
+          <h1 className="font-heading text-2xl md:text-3xl font-bold">Turni</h1>
           <p className="text-muted-foreground">
-            {format(currentWeekStart, "d MMMM", { locale: it })} - {format(addDays(currentWeekStart, 6), "d MMMM yyyy", { locale: it })}
+            {format(currentMonth, "MMMM yyyy", { locale: it })}
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={goToPreviousWeek} data-testid="prev-week-btn">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="icon" onClick={goToPreviousMonth}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <Button variant="outline" onClick={goToToday} disabled={isCurrentWeek} data-testid="today-btn">
+          <Button variant="outline" onClick={goToToday}>
             Oggi
           </Button>
-          <Button variant="outline" size="icon" onClick={goToNextWeek} data-testid="next-week-btn">
+          <Button variant="outline" size="icon" onClick={goToNextMonth}>
             <ChevronRight className="w-4 h-4" />
           </Button>
+          
+          {isManager && (
+            <Button 
+              variant="outline" 
+              onClick={() => setCopyDialog({ open: true })}
+              className="ml-2"
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Copia settimana
+            </Button>
+          )}
         </div>
       </div>
 
-      {/* Week Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-          {[1, 2, 3, 4, 5, 6, 7].map(i => (
-            <div key={i} className="h-48 skeleton-pulse rounded-2xl" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-          {weekDates.map((day, index) => {
-            const daySchedules = getSchedulesForDay(day.dateStr);
-            const isToday = format(new Date(), "yyyy-MM-dd") === day.dateStr;
-
-            return (
-              <motion.div
-                key={day.dateStr}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <Card className={`min-h-[200px] ${isToday ? 'border-accent border-2' : ''}`}>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className={`text-sm font-medium ${isToday ? 'text-accent' : 'text-muted-foreground'}`}>
-                          {day.name}
-                        </p>
-                        <p className={`text-2xl font-bold ${isToday ? 'text-accent' : ''}`}>
-                          {format(day.date, "d")}
-                        </p>
-                      </div>
-                      {isManager && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openAddDialog(day.dateStr)}
-                          data-testid={`add-schedule-${day.dateStr}`}
-                          className="text-accent"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {daySchedules.length > 0 ? (
-                      daySchedules.map((schedule) => (
-                        <div
-                          key={schedule.id}
-                          className="p-2 bg-secondary/50 rounded-lg text-sm group"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
-                                <span className="text-xs font-semibold text-accent">
-                                  {schedule.user_name.charAt(0)}
-                                </span>
-                              </div>
-                              <span className="font-medium">{schedule.user_name}</span>
-                            </div>
-                            {isManager && (
-                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6"
-                                  onClick={() => openEditDialog(schedule)}
-                                  data-testid={`edit-schedule-${schedule.id}`}
-                                >
-                                  <Pencil className="w-3 h-3" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6 text-destructive"
-                                  onClick={() => setDeleteDialog({ open: true, schedule })}
-                                  data-testid={`delete-schedule-${schedule.id}`}
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </Button>
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-1 mt-1 text-muted-foreground">
-                            <Clock className="w-3 h-3" />
-                            <span>{schedule.start_time} - {schedule.end_time}</span>
-                          </div>
-                          {schedule.notes && (
-                            <p className="text-xs text-muted-foreground mt-1 italic">
-                              {schedule.notes}
-                            </p>
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-sm text-muted-foreground text-center py-4">
-                        Nessun turno
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
-
       {/* Legend */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-wrap items-center gap-6">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                {schedules.length} turni questa settimana
-              </span>
-            </div>
-            {users.map(u => {
-              const userSchedules = schedules.filter(s => s.user_id === u.id);
+        <CardContent className="p-3">
+          <div className="flex flex-wrap items-center gap-4">
+            {users.map((u, index) => (
+              <div key={u.id} className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${getUserColor(u.id)}`} />
+                <span className="text-sm">{u.name}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Calendar Grid */}
+      <Card>
+        <CardContent className="p-2 md:p-4">
+          {/* Days Header */}
+          <div className="grid grid-cols-7 gap-1 mb-2">
+            {DAYS_SHORT.map(day => (
+              <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Days */}
+          <div className="grid grid-cols-7 gap-1">
+            {monthDays.map(({ date, isCurrentMonth }, index) => {
+              const daySchedules = getSchedulesForDay(date);
+              const hasSchedules = daySchedules.length > 0;
+              
               return (
-                <div key={u.id} className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
-                    <span className="text-xs font-semibold text-accent">{u.name.charAt(0)}</span>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: index * 0.01 }}
+                  onClick={() => openDayDialog(date)}
+                  className={`
+                    min-h-[80px] md:min-h-[100px] p-1 md:p-2 rounded-lg cursor-pointer
+                    transition-all duration-200 border
+                    ${isCurrentMonth ? 'bg-card hover:bg-muted' : 'bg-muted/30 opacity-50'}
+                    ${isToday(date) ? 'border-accent border-2' : 'border-transparent'}
+                  `}
+                >
+                  <div className={`text-sm font-medium mb-1 ${isToday(date) ? 'text-accent' : ''}`}>
+                    {format(date, "d")}
                   </div>
-                  <span className="text-sm">{u.name}: {userSchedules.length} turni</span>
-                </div>
+                  
+                  <div className="space-y-1">
+                    {daySchedules.slice(0, 3).map((schedule, i) => (
+                      <div
+                        key={schedule.id}
+                        className={`text-[10px] md:text-xs px-1 py-0.5 rounded text-white truncate ${getUserColor(schedule.user_id)}`}
+                      >
+                        <span className="hidden md:inline">{schedule.user_name} </span>
+                        {schedule.start_time}
+                      </div>
+                    ))}
+                    {daySchedules.length > 3 && (
+                      <div className="text-[10px] text-muted-foreground">
+                        +{daySchedules.length - 3} altri
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
               );
             })}
           </div>
         </CardContent>
       </Card>
+
+      {/* Day Detail Dialog */}
+      <Dialog open={dayDialog.open} onOpenChange={(open) => !open && setDayDialog({ open: false, date: null })}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span>
+                {dayDialog.date && format(dayDialog.date, "EEEE d MMMM", { locale: it })}
+              </span>
+              {isManager && dayDialog.date && (
+                <Button size="sm" onClick={() => openAddDialog(dayDialog.date)}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Aggiungi
+                </Button>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-3 py-4">
+            {dayDialog.date && getSchedulesForDay(dayDialog.date).length > 0 ? (
+              getSchedulesForDay(dayDialog.date).map((schedule) => (
+                <div
+                  key={schedule.id}
+                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${getUserColor(schedule.user_id)}`}>
+                      {schedule.user_name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-medium">{schedule.user_name}</p>
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {schedule.start_time} - {schedule.end_time}
+                      </p>
+                      {schedule.notes && (
+                        <p className="text-xs text-muted-foreground italic">{schedule.notes}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {isManager && (
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => openEditDialog(schedule)}
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive"
+                        onClick={() => setDeleteDialog({ open: true, schedule })}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-8">
+                Nessun turno per questo giorno
+              </p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Schedule Dialog */}
       <Dialog open={scheduleDialog.open} onOpenChange={(open) => !open && setScheduleDialog({ open: false, schedule: null })}>
@@ -349,7 +439,7 @@ const Turni = () => {
                 onValueChange={(value) => setScheduleForm({ ...scheduleForm, user_id: value })}
                 disabled={!!scheduleDialog.schedule}
               >
-                <SelectTrigger data-testid="schedule-user-select">
+                <SelectTrigger>
                   <SelectValue placeholder="Seleziona dipendente" />
                 </SelectTrigger>
                 <SelectContent>
@@ -366,7 +456,6 @@ const Turni = () => {
                 value={scheduleForm.date}
                 onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
                 disabled={!!scheduleDialog.schedule}
-                data-testid="schedule-date-input"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -376,7 +465,6 @@ const Turni = () => {
                   type="time"
                   value={scheduleForm.start_time}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, start_time: e.target.value })}
-                  data-testid="schedule-start-input"
                 />
               </div>
               <div className="space-y-2">
@@ -385,7 +473,6 @@ const Turni = () => {
                   type="time"
                   value={scheduleForm.end_time}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, end_time: e.target.value })}
-                  data-testid="schedule-end-input"
                 />
               </div>
             </div>
@@ -395,7 +482,6 @@ const Turni = () => {
                 value={scheduleForm.notes}
                 onChange={(e) => setScheduleForm({ ...scheduleForm, notes: e.target.value })}
                 placeholder="Es. Apertura, Chiusura..."
-                data-testid="schedule-notes-input"
               />
             </div>
           </div>
@@ -403,8 +489,40 @@ const Turni = () => {
             <Button variant="outline" onClick={() => setScheduleDialog({ open: false, schedule: null })}>
               Annulla
             </Button>
-            <Button onClick={saveSchedule} data-testid="save-schedule-btn">
+            <Button onClick={saveSchedule}>
               Salva
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Copy Week Dialog */}
+      <Dialog open={copyDialog.open} onOpenChange={(open) => !open && setCopyDialog({ open: false })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Copia turni da altra settimana</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <p className="text-sm text-muted-foreground">
+              Seleziona una data della settimana da cui copiare i turni. 
+              I turni verranno copiati nella settimana corrente.
+            </p>
+            <div className="space-y-2">
+              <Label>Settimana di origine</Label>
+              <Input
+                type="date"
+                value={copyFromWeek}
+                onChange={(e) => setCopyFromWeek(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCopyDialog({ open: false })}>
+              Annulla
+            </Button>
+            <Button onClick={copyWeekSchedules}>
+              <Copy className="w-4 h-4 mr-2" />
+              Copia turni
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -416,7 +534,7 @@ const Turni = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminare questo turno?</AlertDialogTitle>
             <AlertDialogDescription>
-              Stai per eliminare il turno di {deleteDialog.schedule?.user_name} del {deleteDialog.schedule?.date}.
+              Stai per eliminare il turno di {deleteDialog.schedule?.user_name}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
