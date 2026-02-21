@@ -67,7 +67,10 @@ const Problemi = () => {
     equipment_id: "",
     equipment_name_manual: "",
     description: "",
-    priority: "medium"
+    priority: "medium",
+    contact_phone: "",
+    contact_email: "",
+    contact_whatsapp: ""
   });
   
   const [equipmentForm, setEquipmentForm] = useState({
