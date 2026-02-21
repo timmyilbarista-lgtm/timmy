@@ -123,6 +123,54 @@ const Checklist = () => {
 
   const isManager = user?.role === "manager";
 
+  // Drag & Drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    
+    if (active.id !== over?.id && selectedCategory) {
+      const categoryItems = items.filter(i => i.category_id === selectedCategory.id);
+      const oldIndex = categoryItems.findIndex(i => i.id === active.id);
+      const newIndex = categoryItems.findIndex(i => i.id === over.id);
+      
+      const reorderedCategoryItems = arrayMove(categoryItems, oldIndex, newIndex);
+      
+      // Update local state
+      const otherItems = items.filter(i => i.category_id !== selectedCategory.id);
+      const newItems = [...otherItems, ...reorderedCategoryItems];
+      setItems(newItems);
+      
+      // Save to backend
+      try {
+        const reorderData = reorderedCategoryItems.map((item, index) => ({
+          id: item.id,
+          order: index
+        }));
+        await api.put("/checklist-items/reorder", { items: reorderData });
+        toast.success("Ordine salvato!");
+      } catch (error) {
+        toast.error("Errore nel salvataggio dell'ordine");
+        fetchData(); // Revert on error
+      }
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [categoryId]);
