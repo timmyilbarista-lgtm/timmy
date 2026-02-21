@@ -3,51 +3,45 @@
   <rect width="512" height="512" rx="100" fill="white"/>
   
   <!-- Ombra sotto - centrata -->
-  <ellipse cx="235" cy="415" rx="100" ry="15" fill="#D1D5DB" opacity="0.5"/>
+  <ellipse cx="256" cy="415" rx="100" ry="15" fill="#D1D5DB" opacity="0.5"/>
   
-  <!-- Tazza cappuccino italiano - CENTRATA -->
-  <path d="M80 200 
-           Q80 180 120 175
-           L360 175
-           Q400 180 400 200
-           Q420 280 380 350
-           Q340 400 230 400
-           Q120 400 100 350
-           Q60 280 80 200
+  <!-- Tazza cappuccino italiano - PIU CENTRATA -->
+  <path d="M100 200 
+           Q100 180 140 175
+           L380 175
+           Q420 180 420 200
+           Q440 280 400 350
+           Q360 400 256 400
+           Q150 400 120 350
+           Q80 280 100 200
            Z" fill="#B5651D"/>
   
   <!-- Riflesso sinistro -->
-  <path d="M90 200 
-           Q90 190 110 185
-           L140 185
-           Q110 250 120 320
-           Q125 360 140 380
-           L120 375
-           Q80 350 75 300
-           Q65 250 90 200
+  <path d="M110 200 
+           Q110 190 130 185
+           L160 185
+           Q130 250 140 320
+           Q145 360 160 380
+           L140 375
+           Q100 350 95 300
+           Q85 250 110 200
            Z" fill="#CD853F" opacity="0.4"/>
   
-  <!-- Manico piccolo e attaccato -->
-  <path d="M400 230 
-           Q430 235 435 280
-           Q440 330 415 355
-           Q400 365 400 350" 
-           stroke="#B5651D" stroke-width="18" fill="none" stroke-linecap="round"/>
-  
-  <!-- Riflesso manico -->
-  <path d="M407 250 
-           Q420 255 422 285
-           Q425 315 412 335" 
-           stroke="#CD853F" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.4"/>
+  <!-- Manico MOLTO piccolo e ATTACCATO -->
+  <path d="M420 250 
+           Q440 255 442 290
+           Q444 325 430 345
+           Q420 355 420 340" 
+           stroke="#B5651D" stroke-width="14" fill="none" stroke-linecap="round"/>
   
   <!-- Schiuma latte azzurra - centrata -->
-  <ellipse cx="240" cy="185" rx="145" ry="40" fill="#87CEEB"/>
-  <circle cx="140" cy="165" r="35" fill="#87CEEB"/>
-  <circle cx="240" cy="150" r="42" fill="#87CEEB"/>
-  <circle cx="330" cy="160" r="38" fill="#87CEEB"/>
-  <circle cx="190" cy="135" r="28" fill="#A7DFF0"/>
-  <circle cx="280" cy="130" r="25" fill="#A7DFF0"/>
+  <ellipse cx="260" cy="185" rx="145" ry="40" fill="#87CEEB"/>
+  <circle cx="160" cy="165" r="35" fill="#87CEEB"/>
+  <circle cx="260" cy="150" r="42" fill="#87CEEB"/>
+  <circle cx="350" cy="160" r="38" fill="#87CEEB"/>
+  <circle cx="210" cy="135" r="28" fill="#A7DFF0"/>
+  <circle cx="300" cy="130" r="25" fill="#A7DFF0"/>
   
   <!-- Lettera B bianca al centro -->
-  <text x="235" y="330" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  <text x="256" y="330" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="white" text-anchor="middle">B</text>
 </svg>
