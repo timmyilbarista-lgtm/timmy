@@ -10,6 +10,7 @@ import Problemi from "./pages/Problemi";
 import Notes from "./pages/Notes";
 import History from "./pages/History";
 import Manager from "./pages/Manager";
+import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 import "./App.css";
 
