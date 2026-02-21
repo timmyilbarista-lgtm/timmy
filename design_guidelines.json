@@ -1,0 +1,158 @@
+{
+  "project_name": "BaristaShift_App",
+  "theme_strategy": {
+    "name": "Latte & Espresso",
+    "description": "A dual-mode warm aesthetic inspired by coffee culture. Light mode mimics the warmth of a morning latte (creams, beiges), while dark mode reflects the depth of an evening espresso (rich browns, dark roasts).",
+    "mode_behavior": "Toggle available, defaults to Light Mode (Morning Shift) vs Dark Mode (Evening/Night Shift) based on system time if possible, otherwise user toggle.",
+    "emotional_tone": "Warm, Tactile, Organized, Efficient, Organic."
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Manrope, sans-serif",
+      "body": "Inter, sans-serif",
+      "accent": "Caveat, cursive"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+      "h2": "text-3xl md:text-4xl font-semibold tracking-tight",
+      "h3": "text-2xl font-semibold",
+      "body_lg": "text-lg leading-relaxed",
+      "body_base": "text-base leading-normal",
+      "caption": "text-sm text-muted-foreground",
+      "checklist_item": "text-lg md:text-xl font-medium"
+    },
+    "weights": {
+      "headings": "700",
+      "subheadings": "600",
+      "body": "400"
+    }
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "DEFAULT": "#4A3B32",
+        "foreground": "#F5F1E6",
+        "description": "Rich Coffee Brown - Main actions, active states, heavy text"
+      },
+      "secondary": {
+        "DEFAULT": "#E8DCCA",
+        "foreground": "#4A3B32",
+        "description": "Latte Foam - Secondary buttons, active item backgrounds"
+      },
+      "accent": {
+        "DEFAULT": "#D98E45",
+        "foreground": "#FFFFFF",
+        "description": "Caramel / Roasted Bean - Highlights, notifications, important tags"
+      },
+      "background": {
+        "light": "#F9F7F2",
+        "dark": "#1C1917"
+      },
+      "surface": {
+        "light": "#FFFFFF",
+        "dark": "#292524",
+        "description": "Card backgrounds"
+      },
+      "muted": {
+        "DEFAULT": "#F0EBE0",
+        "foreground": "#8C7E72"
+      },
+      "status": {
+        "success": "#789E58",
+        "warning": "#E6A15C",
+        "error": "#9F4636",
+        "info": "#5C8CA8"
+      }
+    },
+    "gradients": {
+      "warm_morning": "linear-gradient(135deg, #F9F7F2 0%, #E8DCCA 100%)",
+      "rich_roast": "linear-gradient(135deg, #292524 0%, #1C1917 100%)"
+    }
+  },
+  "layout_system": {
+    "grid_strategy": "Bento Grid Protocol",
+    "spacing": {
+      "container_padding": "p-6 md:p-8",
+      "item_gap": "gap-4 md:gap-6",
+      "section_gap": "gap-8 md:gap-12"
+    },
+    "containers": {
+      "card": "rounded-2xl border border-border/40 shadow-sm bg-card",
+      "dashboard_main": "grid grid-cols-1 md:grid-cols-12 gap-6",
+      "tablet_sidebar": "w-20 md:w-64 flex-shrink-0 border-r border-border bg-card/50 backdrop-blur-xl h-screen sticky top-0"
+    },
+    "breakpoints": {
+      "tablet": "768px"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#4A3B32] text-[#F5F1E6] hover:bg-[#3E3129] rounded-xl px-6 py-3 shadow-md transition-all active:scale-95",
+      "secondary": "bg-[#E8DCCA] text-[#4A3B32] hover:bg-[#DBCBB6] rounded-xl px-6 py-3 transition-all active:scale-95",
+      "ghost": "hover:bg-[#F0EBE0] text-[#4A3B32] rounded-xl px-4 py-2"
+    },
+    "cards": {
+      "default": "bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow-md transition-shadow duration-300",
+      "interactive": "cursor-pointer hover:border-[#D98E45] transition-colors"
+    },
+    "inputs": {
+      "default": "bg-[#F9F7F2] border-[#E8DCCA] focus:ring-2 focus:ring-[#D98E45] rounded-xl h-12 px-4"
+    },
+    "checklist": {
+      "item": "flex items-center gap-4 p-4 rounded-xl border border-transparent hover:bg-[#F0EBE0] transition-colors cursor-pointer",
+      "checkbox": "h-6 w-6 rounded-md border-2 border-[#4A3B32] text-[#4A3B32] focus:ring-[#D98E45]"
+    }
+  },
+  "visual_enhancers": {
+    "radius": "rounded-2xl",
+    "shadows": {
+      "soft": "0 4px 20px -2px rgba(74, 59, 50, 0.05)",
+      "float": "0 10px 40px -10px rgba(74, 59, 50, 0.1)"
+    },
+    "textures": {
+      "grain": "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E\")"
+    }
+  },
+  "image_assets": {
+    "login_hero": {
+      "url": "https://images.unsplash.com/photo-1764002317052-f0e1c4263789?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "alt": "Barista pouring steamed milk, conveying craft and warmth",
+      "position": "Login page side panel or background"
+    },
+    "dashboard_bg_texture": {
+      "url": "https://images.unsplash.com/photo-1762539401839-b8378f395cc1?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "alt": "Minimalist coffee beans texture",
+      "position": "Subtle overlay on dashboard or card headers"
+    },
+    "empty_state_checklists": {
+      "url": "https://images.unsplash.com/photo-1736813133483-172c68973cb4?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "alt": "Coffee cup on wooden table",
+      "position": "Empty state when no checklists are active"
+    },
+    "manager_panel_hero": {
+      "url": "https://images.pexels.com/photos/8979158/pexels-photo-8979158.jpeg",
+      "alt": "Detailed latte art",
+      "position": "Manager dashboard header"
+    }
+  },
+  "instructions_to_main_agent": [
+    "INSTALL_DEPENDENCIES: `npm install lucide-react sonner date-fns clsx tailwind-merge framer-motion` (or yarn add)",
+    "SETUP_FONTS: Import 'Manrope' and 'Inter' from Google Fonts in index.css.",
+    "THEME_SETUP: Configure tailwind.config.js with the provided palette colors (primary, secondary, accent, etc.).",
+    "LAYOUT_RULE: Dashboard MUST use a Bento Grid layout. Do not use simple rows. Use col-span-X classes to create visual interest.",
+    "INTERACTION_RULE: All checklist items must be large enough for a thumb tap (min-height 48px).",
+    "ACCESSIBILITY: Ensure text contrast meets WCAG AA. The coffee brown on beige is generally safe, but check lighter text.",
+    "MOTION: Add 'framer-motion' for checklist completion animations (e.g., a subtle scale-up and color change to green).",
+    "NAVIGATION: Create a Sidebar navigation for Tablet/Desktop. Bottom nav is acceptable for Mobile only.",
+    "NOTES_FEATURE: Use a 'sticky note' visual metaphor for the shift notes section (soft yellow/beige bg with shadow).",
+    "TESTING: Add `data-testid` to all interactive elements (buttons, inputs, checklist items)."
+  ],
+  "UNIVERSAL_GUIDELINES": [
+    "Don't make generic centered layouts. Use asymmetry.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur) for sticky headers/sidebars.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Micro-animations for every interaction (hover, click, toggle).",
+    "Use 'sonner' for all toast notifications."
+  ]
+}
