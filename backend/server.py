@@ -160,6 +160,62 @@ class WorkScheduleUpdate(BaseModel):
     end_time: Optional[str] = None
     notes: Optional[str] = None
 
+# ============== EQUIPMENT & PROBLEMS MODELS ==============
+
+class EquipmentBase(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    type: str = "owned"  # owned (proprietà) or rental (comodato)
+    contact_name: str = ""
+    contact_phone: str = ""
+    contact_email: str = ""
+    contact_whatsapp: str = ""
+    notes: str = ""
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class EquipmentCreate(BaseModel):
+    name: str
+    type: str = "owned"
+    contact_name: str = ""
+    contact_phone: str = ""
+    contact_email: str = ""
+    contact_whatsapp: str = ""
+    notes: str = ""
+
+class EquipmentUpdate(BaseModel):
+    name: Optional[str] = None
+    type: Optional[str] = None
+    contact_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_whatsapp: Optional[str] = None
+    notes: Optional[str] = None
+
+class ProblemReportBase(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    equipment_id: str
+    equipment_name: str
+    description: str
+    priority: str = "medium"  # low, medium, high
+    status: str = "open"  # open, in_progress, resolved
+    reported_by: str
+    reported_by_name: str
+    resolved_at: Optional[datetime] = None
+    resolved_by: Optional[str] = None
+    resolution_notes: str = ""
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ProblemReportCreate(BaseModel):
+    equipment_id: str
+    description: str
+    priority: str = "medium"
+
+class ProblemReportUpdate(BaseModel):
+    status: Optional[str] = None
+    resolution_notes: Optional[str] = None
+
 # ============== HELPERS ==============
 
 def hash_pin(pin: str) -> str:
