@@ -25,7 +25,7 @@ const Landing = () => {
             <h2 className="text-4xl font-bold tracking-wider text-white leading-none" style={{ fontFamily: 'Georgia, serif' }}>
               TIMMY<span style={{ fontSize: '10px', verticalAlign: 'super' }}>®</span>
             </h2>
-            <p className="text-[11px] tracking-[0.2em] font-medium text-amber-200 -mt-0.5" style={{ marginLeft: '-20px' }}>COFFEE MASTER</p>
+            <p className="text-[11px] tracking-[0.2em] font-medium text-amber-200 -mt-0.5" style={{ marginLeft: '-8px' }}>COFFEE MASTER</p>
             <div className="flex items-center justify-center gap-1.5 mt-0">
               <span className="text-[8px] text-amber-300">EST.</span>
               <span className="w-1 h-1 rounded-full bg-amber-400"></span>
