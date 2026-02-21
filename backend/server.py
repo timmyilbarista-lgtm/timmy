@@ -347,6 +347,19 @@ async def create_checklist_item(data: ChecklistItemCreate, user: dict = Depends(
     await db.checklist_items.insert_one(doc)
     return {"id": item.id, "name": item.name, "category_id": item.category_id}
 
+class ReorderItem(BaseModel):
+    id: str
+    order: int
+
+class ReorderRequest(BaseModel):
+    items: List[ReorderItem]
+
+@api_router.put("/checklist-items/reorder")
+async def reorder_checklist_items(data: ReorderRequest, user: dict = Depends(get_current_user)):
+    for item in data.items:
+        await db.checklist_items.update_one({"id": item.id}, {"$set": {"order": item.order}})
+    return {"success": True}
+
 @api_router.put("/checklist-items/{item_id}")
 async def update_checklist_item(item_id: str, data: ChecklistItemUpdate, user: dict = Depends(require_manager)):
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
