@@ -58,7 +58,7 @@ const Problemi = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  const [reportDialog, setReportDialog] = useState({ open: false });
+  const [reportDialog, setReportDialog] = useState({ open: false, problem: null });
   const [contactDialog, setContactDialog] = useState({ open: false, equipment: null });
   const [equipmentDialog, setEquipmentDialog] = useState({ open: false, equipment: null });
   const [deleteDialog, setDeleteDialog] = useState({ open: false, type: null, id: null });
