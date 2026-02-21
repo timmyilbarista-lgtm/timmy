@@ -248,10 +248,17 @@ const Checklist = () => {
             </div>
           </>
         ) : (
-          <div>
-            <Link to="/"><Button variant="ghost" size="icon"><ChevronLeft className="w-5 h-5"/></Button></Link><h1 className="font-heading text-2xl md:text-3xl font-bold">Checklist</h1>
-            <p className="text-muted-foreground">Seleziona una categoria</p>
-          </div>
+          <>
+            <Link to="/">
+              <Button variant="ghost" size="icon" data-testid="back-to-dashboard-btn">
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="font-heading text-2xl md:text-3xl font-bold">Checklist</h1>
+              <p className="text-muted-foreground">Seleziona una categoria</p>
+            </div>
+          </>
         )}
       </div>
 
