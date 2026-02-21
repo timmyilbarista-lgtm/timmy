@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { format, addDays, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths } from "date-fns";
+import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths } from "date-fns";
 import { it } from "date-fns/locale";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Plus, Clock, Pencil, Trash2, ArrowLeft } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -15,7 +15,6 @@ import api from "../lib/api";
 
 const Turni = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [schedules, setSchedules] = useState([]);
   const [users, setUsers] = useState([]);
@@ -91,6 +90,8 @@ const Turni = () => {
     fetchData();
   };
 
+  const goBack = () => setSelectedDay(null);
+
   const monthDays = getMonthDays();
 
   // Vista dettaglio giorno
@@ -99,7 +100,7 @@ const Turni = () => {
     return (
       <div className="p-4 md:p-8 space-y-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setSelectedDay(null)}><ArrowLeft className="w-5 h-5"/></Button>
+          <Button variant="ghost" size="icon" onClick={goBack}><ArrowLeft className="w-5 h-5"/></Button>
           <h1 className="font-heading text-xl font-bold">{format(selectedDay, "EEEE d MMMM", { locale: it })}</h1>
           {isManager && <Button size="sm" onClick={() => openNew(selectedDay)} className="ml-auto"><Plus className="w-4 h-4 mr-1"/>Aggiungi</Button>}
         </div>
@@ -119,7 +120,7 @@ const Turni = () => {
               )}
             </CardContent>
           </Card>
-        )) : <p className="text-center text-muted-foreground py-8">Nessun turno</p>}
+        )) : <p className="text-center text-muted-foreground py-8">Nessun turno per questo giorno</p>}
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent>
@@ -148,7 +149,7 @@ const Turni = () => {
   return (
     <div className="p-4 md:p-8 space-y-4">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" onClick={() => navigate(-1)}><ArrowLeft className="w-5 h-5"/></Button>
+        <Link to="/"><Button variant="ghost" size="icon"><ArrowLeft className="w-5 h-5"/></Button></Link>
         <h1 className="font-heading text-xl font-bold flex-1">Turni</h1>
         <Button variant="outline" size="icon" onClick={() => setCurrentMonth(m => subMonths(m, 1))}><ChevronLeft className="w-4 h-4"/></Button>
         <span className="text-sm font-medium w-28 text-center">{format(currentMonth, "MMM yyyy", { locale: it })}</span>
