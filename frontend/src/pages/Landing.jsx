@@ -21,14 +21,14 @@ const Landing = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200')] bg-cover bg-center opacity-20" />
         <div className="relative max-w-4xl mx-auto px-6 py-16 text-center">
           {/* Logo */}
-          <div className="mb-8 text-center">
-            <h2 className="text-5xl font-bold tracking-wide text-white" style={{ fontFamily: 'Georgia, serif' }}>
-              TIMMY<span style={{ fontSize: '16px', verticalAlign: 'super' }}>®</span>
+          <div className="mb-6 text-center">
+            <h2 className="text-3xl font-bold tracking-wide text-white" style={{ fontFamily: 'Georgia, serif' }}>
+              TIMMY<span style={{ fontSize: '12px', verticalAlign: 'super' }}>®</span>
             </h2>
-            <p className="text-base tracking-[0.3em] font-medium text-amber-200 mt-1">COFFEE MASTER</p>
-            <div className="flex items-center justify-center gap-3 mt-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-              <svg width="24" height="32" viewBox="0 0 24 32" fill="none">
+            <p className="text-xs tracking-[0.25em] font-medium text-amber-200">COFFEE MASTER</p>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <span className="w-1 h-1 rounded-full bg-amber-400"></span>
+              <svg width="18" height="24" viewBox="0 0 24 32" fill="none">
                 <ellipse cx="12" cy="16" rx="10" ry="14" fill="#D4A574" opacity="0.9"/>
                 <path d="M12 4C12 4 13.5 14 12 28" stroke="#8B6914" strokeWidth="1.5" fill="none"/>
                 <ellipse cx="12" cy="16" rx="10" ry="14" fill="url(#coffeeGrain)" opacity="0.6"/>
@@ -38,7 +38,7 @@ const Landing = () => {
                   </pattern>
                 </defs>
               </svg>
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              <span className="w-1 h-1 rounded-full bg-amber-400"></span>
             </div>
           </div>
           
