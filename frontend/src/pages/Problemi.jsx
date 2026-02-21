@@ -125,6 +125,8 @@ const Problemi = () => {
     
     try {
       let res;
+      let contactInfo = null;
+      
       if (reportForm.equipment_id) {
         // Use existing equipment
         res = await api.post("/problems", {
@@ -133,22 +135,41 @@ const Problemi = () => {
           priority: reportForm.priority
         });
         
-        // Show contact info
-        if (res.data.contact && (res.data.contact.phone || res.data.contact.email)) {
-          const eq = equipment.find(e => e.id === reportForm.equipment_id);
-          setContactDialog({ open: true, equipment: eq });
+        // Get contact from equipment
+        const eq = equipment.find(e => e.id === reportForm.equipment_id);
+        if (eq && (eq.contact_phone || eq.contact_email || eq.contact_whatsapp)) {
+          contactInfo = eq;
         }
       } else {
-        // Create manual report
+        // Create manual report with contacts
         res = await api.post("/problems/manual", {
           equipment_name: reportForm.equipment_name_manual,
           description: reportForm.description,
-          priority: reportForm.priority
+          priority: reportForm.priority,
+          contact_phone: reportForm.contact_phone,
+          contact_email: reportForm.contact_email,
+          contact_whatsapp: reportForm.contact_whatsapp
         });
+        
+        // Use manual contacts
+        if (reportForm.contact_phone || reportForm.contact_email || reportForm.contact_whatsapp) {
+          contactInfo = {
+            name: "Contatto inserito",
+            contact_phone: reportForm.contact_phone,
+            contact_email: reportForm.contact_email,
+            contact_whatsapp: reportForm.contact_whatsapp
+          };
+        }
       }
       
       toast.success("Problema segnalato!");
       setReportDialog({ open: false });
+      
+      // Show contact dialog if contacts available
+      if (contactInfo) {
+        setContactDialog({ open: true, equipment: contactInfo });
+      }
+      
       fetchData();
     } catch (error) {
       toast.error("Errore nella segnalazione");
