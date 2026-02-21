@@ -1,4 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="100" fill="#8B6F5C"/>
-  <text x="256" y="340" font-family="Arial, sans-serif" font-size="300" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  <!-- Sfondo bianco -->
+  <rect width="512" height="512" rx="100" fill="white"/>
+  
+  <!-- Ombra -->
+  <ellipse cx="230" cy="450" rx="120" ry="25" fill="#D1D5DB" opacity="0.6"/>
+  
+  <!-- Corpo tazza - marrone scuro -->
+  <path d="M100 150 L100 380 Q100 420 140 420 L320 420 Q360 420 360 380 L360 150 Z" fill="#B5651D"/>
+  
+  <!-- Parte laterale tazza - marrone più chiaro -->
+  <path d="M100 150 L100 380 Q100 420 140 420 L160 420 L160 150 Z" fill="#CD853F" opacity="0.6"/>
+  
+  <!-- Manico tazza -->
+  <path d="M360 180 Q420 180 420 260 Q420 340 360 340" stroke="#B5651D" stroke-width="35" fill="none" stroke-linecap="round"/>
+  
+  <!-- Riflesso sul manico -->
+  <path d="M375 200 Q400 200 400 260 Q400 310 375 320" stroke="#CD853F" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Schiuma latte - azzurro chiaro -->
+  <ellipse cx="230" cy="145" rx="130" ry="45" fill="#87CEEB"/>
+  <circle cx="160" cy="120" r="35" fill="#87CEEB"/>
+  <circle cx="230" cy="105" r="40" fill="#87CEEB"/>
+  <circle cx="300" cy="115" r="35" fill="#87CEEB"/>
+  <circle cx="195" cy="95" r="28" fill="#A7DFF0"/>
+  <circle cx="265" cy="90" r="25" fill="#A7DFF0"/>
+  
+  <!-- Riflesso sulla tazza -->
+  <rect x="120" y="200" width="15" height="80" rx="7" fill="white" opacity="0.3"/>
 </svg>
