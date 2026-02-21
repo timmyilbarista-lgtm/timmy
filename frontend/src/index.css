@@ -184,3 +184,15 @@
         display: contents !important;
     }
 }
+
+/* Nasconde il badge Emergent */
+[data-testid="emergent-badge"],
+[class*="emergent-badge"],
+[id*="emergent-badge"],
+div[style*="Made with"],
+a[href*="emergent.sh"][style*="position: fixed"],
+div[style*="position: fixed"][style*="bottom"] > a[href*="emergent"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
