@@ -233,8 +233,8 @@ const Checklist = () => {
       <div className="flex items-center gap-4">
         {selectedCategory ? (
           <>
-            <Link to="/checklist">
-              <Button variant="ghost" size="icon" data-testid="back-to-categories-btn">
+            <Link to="/">
+              <Button variant="ghost" size="icon" data-testid="back-to-dashboard-btn">
                 <ChevronLeft className="w-5 h-5" />
               </Button>
             </Link>
