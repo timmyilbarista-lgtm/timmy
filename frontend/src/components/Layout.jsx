@@ -143,12 +143,12 @@ const Layout = () => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors",
+                  "flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors",
                   isActive ? "text-accent" : "text-muted-foreground"
                 )}
               >
                 <Icon className="w-5 h-5" />
-                <span className="text-xs">{item.label}</span>
+                <span className="text-[10px]">{item.label}</span>
               </NavLink>
             );
           })}
@@ -156,12 +156,12 @@ const Layout = () => {
             <NavLink
               to="/manager"
               className={cn(
-                "flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors",
+                "flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-colors",
                 location.pathname === "/manager" ? "text-accent" : "text-muted-foreground"
               )}
             >
               <Settings className="w-5 h-5" />
-              <span className="text-xs">Gestione</span>
+              <span className="text-[10px]">Gestione</span>
             </NavLink>
           )}
         </div>
