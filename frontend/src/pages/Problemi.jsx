@@ -104,17 +104,32 @@ const Problemi = () => {
     }
   };
 
-  const openReportDialog = () => {
-    setReportForm({
-      equipment_id: "",
-      equipment_name_manual: "",
-      description: "",
-      priority: "medium",
-      contact_phone: "",
-      contact_email: "",
-      contact_whatsapp: ""
-    });
-    setReportDialog({ open: true });
+  const openReportDialog = (problem = null) => {
+    if (problem) {
+      // Edit mode
+      setReportForm({
+        equipment_id: problem.equipment_id !== "manual" ? problem.equipment_id : "",
+        equipment_name_manual: problem.equipment_id === "manual" ? problem.equipment_name : "",
+        description: problem.description,
+        priority: problem.priority,
+        contact_phone: problem.contact_phone || "",
+        contact_email: problem.contact_email || "",
+        contact_whatsapp: problem.contact_whatsapp || ""
+      });
+      setReportDialog({ open: true, problem });
+    } else {
+      // New mode
+      setReportForm({
+        equipment_id: "",
+        equipment_name_manual: "",
+        description: "",
+        priority: "medium",
+        contact_phone: "",
+        contact_email: "",
+        contact_whatsapp: ""
+      });
+      setReportDialog({ open: true, problem: null });
+    }
   };
 
   const submitReport = async () => {
