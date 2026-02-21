@@ -3,6 +3,23 @@ import { useParams, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import {
   Package,
   Coffee,
   ClipboardList,
@@ -17,7 +34,8 @@ import {
   User,
   Pencil,
   Trash2,
-  Plus
+  Plus,
+  GripVertical
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
@@ -45,6 +63,40 @@ import {
 } from "../components/ui/alert-dialog";
 import { toast } from "sonner";
 import api from "../lib/api";
+
+// Sortable Item Component
+const SortableItem = ({ item, children }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="relative">
+      <div 
+        {...attributes} 
+        {...listeners}
+        className="absolute left-2 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing touch-none p-2 text-muted-foreground hover:text-foreground z-10"
+      >
+        <GripVertical className="w-5 h-5" />
+      </div>
+      <div className="pl-10">
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const iconMap = {
   package: Package,
