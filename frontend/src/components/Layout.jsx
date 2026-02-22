@@ -257,6 +257,7 @@ const Layout = () => {
                 value={credentialsForm.name}
                 onChange={(e) => setCredentialsForm({ ...credentialsForm, name: e.target.value })}
                 placeholder="Il tuo nome"
+                data-testid="credentials-name-input"
               />
             </div>
             <div className="space-y-2">
@@ -265,8 +266,9 @@ const Layout = () => {
                 type="password"
                 value={credentialsForm.pin}
                 onChange={(e) => setCredentialsForm({ ...credentialsForm, pin: e.target.value })}
-                placeholder="Nuovo PIN (4 cifre)"
-                maxLength={4}
+                placeholder={user?.role === "admin" ? "Nuovo PIN (6 cifre)" : "Nuovo PIN (4 cifre)"}
+                maxLength={user?.role === "admin" ? 6 : 4}
+                data-testid="credentials-pin-input"
               />
             </div>
             <div className="space-y-2">
@@ -276,7 +278,8 @@ const Layout = () => {
                 value={credentialsForm.confirmPin}
                 onChange={(e) => setCredentialsForm({ ...credentialsForm, confirmPin: e.target.value })}
                 placeholder="Conferma PIN"
-                maxLength={4}
+                maxLength={user?.role === "admin" ? 6 : 4}
+                data-testid="credentials-confirm-input"
               />
             </div>
           </div>
