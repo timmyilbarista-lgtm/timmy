@@ -73,7 +73,7 @@ const Dashboard = () => {
     try {
       await api.post("/shifts", { shift_type: shiftType });
       toast.success("Turno aperto con successo!");
-      fetchData();
+      navigate("/checklist");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Errore nell'apertura del turno");
     }
