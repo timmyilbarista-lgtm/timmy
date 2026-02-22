@@ -201,6 +201,51 @@ const Manager = () => {
     }
   };
 
+  // User functions
+  const openUserDialog = (user = null) => {
+    if (user) {
+      setUserForm({ name: user.name, pin: "", role: user.role });
+    } else {
+      setUserForm({ name: "", pin: "", role: "barista" });
+    }
+    setUserDialog({ open: true, user });
+  };
+
+  const saveUser = async () => {
+    try {
+      if (!userForm.name || (!userDialog.user && !userForm.pin)) {
+        toast.error("Compila tutti i campi");
+        return;
+      }
+      if (userDialog.user) {
+        // Update user
+        const updateData = { name: userForm.name, role: userForm.role };
+        if (userForm.pin) updateData.pin = userForm.pin;
+        await api.put(`/users/${userDialog.user.id}`, updateData);
+        toast.success("Utente aggiornato");
+      } else {
+        // Create user
+        await api.post("/users", userForm);
+        toast.success("Utente creato");
+      }
+      fetchData();
+      setUserDialog({ open: false, user: null });
+    } catch (error) {
+      toast.error("Errore nel salvataggio");
+    }
+  };
+
+  const deleteUser = async () => {
+    try {
+      await api.delete(`/users/${deleteDialog.id}`);
+      toast.success("Utente eliminato");
+      fetchData();
+      setDeleteDialog({ open: false, type: null, id: null });
+    } catch (error) {
+      toast.error("Errore nell'eliminazione");
+    }
+  };
+
   const getCategoryName = (categoryId) => {
     return categories.find((c) => c.id === categoryId)?.name || "";
   };
