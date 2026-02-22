@@ -46,7 +46,8 @@ const Layout = () => {
   const [credentialsDialog, setCredentialsDialog] = useState(false);
   const [credentialsForm, setCredentialsForm] = useState({ name: "", pin: "", confirmPin: "" });
 
-  const isManager = user?.role === "manager";
+  const isManager = user?.role === "manager" || user?.role === "admin";
+  const isAdmin = user?.role === "admin";
 
   const openCredentialsDialog = () => {
     setCredentialsForm({ name: user?.name || "", pin: "", confirmPin: "" });
