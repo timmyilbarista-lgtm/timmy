@@ -322,15 +322,25 @@ async def create_user(data: UserCreate, user: dict = Depends(require_manager)):
     # Hash the PIN
     hashed_pin = bcrypt.hashpw(data.pin.encode(), bcrypt.gensalt()).decode()
     
+    # Generate recovery code
+    recovery_code = generate_recovery_code()
+    
     new_user = {
         "id": str(uuid.uuid4()),
         "name": data.name,
         "pin": hashed_pin,
-        "pin_display": data.pin,  # PIN in chiaro per visualizzazione
-        "role": data.role
+        "pin_display": data.pin,
+        "role": data.role,
+        "recovery_code": recovery_code,
+        "password_changed": False
     }
     await db.users.insert_one(new_user)
-    return {"id": new_user["id"], "name": new_user["name"], "role": new_user["role"]}
+    return {
+        "id": new_user["id"], 
+        "name": new_user["name"], 
+        "role": new_user["role"],
+        "recovery_code": recovery_code
+    }
 
 @api_router.put("/users/{user_id}")
 async def update_user(user_id: str, data: UserUpdate, user: dict = Depends(require_manager)):
