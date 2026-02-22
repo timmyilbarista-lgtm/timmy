@@ -317,6 +317,7 @@ async def create_user(data: UserCreate, user: dict = Depends(require_manager)):
         "id": str(uuid.uuid4()),
         "name": data.name,
         "pin": hashed_pin,
+        "pin_display": data.pin,  # PIN in chiaro per visualizzazione
         "role": data.role
     }
     await db.users.insert_one(new_user)
@@ -327,10 +328,18 @@ async def update_user(user_id: str, data: UserUpdate, user: dict = Depends(requi
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
     # Hash PIN if provided
     if "pin" in update_data and update_data["pin"]:
+        update_data["pin_display"] = update_data["pin"]  # Salva PIN in chiaro
         update_data["pin"] = bcrypt.hashpw(update_data["pin"].encode(), bcrypt.gensalt()).decode()
     if update_data:
         await db.users.update_one({"id": user_id}, {"$set": update_data})
     return {"success": True}
+
+@api_router.get("/users/{user_id}")
+async def get_user(user_id: str, user: dict = Depends(require_manager)):
+    db_user = await db.users.find_one({"id": user_id}, {"_id": 0, "pin": 0})
+    if not db_user:
+        raise HTTPException(status_code=404, detail="Utente non trovato")
+    return db_user
 
 @api_router.delete("/users/{user_id}")
 async def delete_user(user_id: str, user: dict = Depends(require_manager)):
