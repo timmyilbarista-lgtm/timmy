@@ -145,6 +145,30 @@ const Dashboard = () => {
     }
   };
 
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    
+    if (active.id !== over?.id) {
+      const oldIndex = categories.findIndex(c => c.id === active.id);
+      const newIndex = categories.findIndex(c => c.id === over.id);
+      
+      const reorderedCategories = arrayMove(categories, oldIndex, newIndex);
+      setCategories(reorderedCategories);
+      
+      try {
+        const reorderData = reorderedCategories.map((cat, index) => ({
+          id: cat.id,
+          order: index
+        }));
+        await api.put("/categories/reorder", { items: reorderData });
+        toast.success("Ordine salvato!");
+      } catch (error) {
+        toast.error("Errore nel salvataggio dell'ordine");
+        fetchData();
+      }
+    }
+  };
+
   const getCategoryStats = (categoryId) => {
     const categoryItems = items.filter((i) => i.category_id === categoryId);
     const completions = shift?.completions || [];
