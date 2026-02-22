@@ -288,8 +288,8 @@ async def register(data: UserCreate):
 async def get_me(user: dict = Depends(get_current_user)):
     return {"id": user["id"], "name": user["name"], "role": user["role"]}
 
-@api_router.get("/users", response_model=List[UserResponse])
-async def get_users(user: dict = Depends(get_current_user)):
+@api_router.get("/users")
+async def get_users(user: dict = Depends(require_manager)):
     users = await db.users.find({}, {"_id": 0, "pin": 0}).to_list(100)
     return users
 
