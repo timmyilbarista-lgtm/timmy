@@ -100,7 +100,7 @@ const SortableItem = ({ item, children }) => {
   );
 };
 
-// Checklist Item Card with internal drag handle
+// Checklist Item Card
 const ChecklistItemCard = ({ 
   item, 
   completed, 
@@ -109,8 +109,7 @@ const ChecklistItemCard = ({
   toggleItem, 
   setNoteDialog, 
   openEditDialog, 
-  setDeleteDialog,
-  dragHandleProps 
+  setDeleteDialog
 }) => {
   return (
     <Card
@@ -120,15 +119,6 @@ const ChecklistItemCard = ({
     >
       <CardContent className="p-4 md:p-6">
         <div className="flex items-start gap-4">
-          {/* Drag Handle inside card */}
-          <div 
-            {...(dragHandleProps?.attributes || {})} 
-            {...(dragHandleProps?.listeners || {})}
-            className="cursor-grab active:cursor-grabbing touch-none p-1 text-muted-foreground hover:text-foreground"
-          >
-            <GripVertical className="w-5 h-5" />
-          </div>
-
           <div
             className="flex items-center justify-center cursor-pointer touch-target"
             onClick={() => toggleItem(item.id, !completed)}
