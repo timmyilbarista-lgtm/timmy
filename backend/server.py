@@ -496,7 +496,7 @@ async def reorder_checklist_items(data: ReorderRequest, user: dict = Depends(get
     return {"success": True}
 
 @api_router.put("/checklist-items/{item_id}")
-async def update_checklist_item(item_id: str, data: ChecklistItemUpdate, user: dict = Depends(require_manager)):
+async def update_checklist_item(item_id: str, data: ChecklistItemUpdate, user: dict = Depends(get_current_user)):
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
     if not update_data:
         raise HTTPException(status_code=400, detail="No data to update")
