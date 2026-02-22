@@ -310,10 +310,13 @@ async def create_user(data: UserCreate, user: dict = Depends(require_manager)):
     if existing:
         raise HTTPException(status_code=400, detail="Utente già esistente")
     
+    # Hash the PIN
+    hashed_pin = bcrypt.hashpw(data.pin.encode(), bcrypt.gensalt()).decode()
+    
     new_user = {
         "id": str(uuid.uuid4()),
         "name": data.name,
-        "pin": data.pin,
+        "pin": hashed_pin,
         "role": data.role
     }
     await db.users.insert_one(new_user)
@@ -322,6 +325,9 @@ async def create_user(data: UserCreate, user: dict = Depends(require_manager)):
 @api_router.put("/users/{user_id}")
 async def update_user(user_id: str, data: UserUpdate, user: dict = Depends(require_manager)):
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    # Hash PIN if provided
+    if "pin" in update_data and update_data["pin"]:
+        update_data["pin"] = bcrypt.hashpw(update_data["pin"].encode(), bcrypt.gensalt()).decode()
     if update_data:
         await db.users.update_one({"id": user_id}, {"$set": update_data})
     return {"success": True}
