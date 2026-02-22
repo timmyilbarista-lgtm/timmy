@@ -202,9 +202,19 @@ const Manager = () => {
   };
 
   // User functions
-  const openUserDialog = (user = null) => {
+  const openUserDialog = async (user = null) => {
     if (user) {
-      setUserForm({ name: user.name, pin: "", role: user.role });
+      // Fetch user details including PIN
+      try {
+        const res = await api.get(`/users/${user.id}`);
+        setUserForm({ 
+          name: res.data.name, 
+          pin: res.data.pin_display || "", 
+          role: res.data.role 
+        });
+      } catch (error) {
+        setUserForm({ name: user.name, pin: "", role: user.role });
+      }
     } else {
       setUserForm({ name: "", pin: "", role: "barista" });
     }
