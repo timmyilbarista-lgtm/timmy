@@ -220,14 +220,6 @@ const Login = () => {
                       {loading ? "Accesso in corso..." : "Accedi"}
                     </Button>
                   </form>
-
-                  <div className="mt-6 p-4 bg-muted rounded-xl">
-                    <p className="text-sm text-muted-foreground mb-2">Utenti demo:</p>
-                    <div className="text-sm space-y-1">
-                      <p><strong>Manager:</strong> nome "Manager", PIN "1234"</p>
-                      <p><strong>Barista:</strong> nome "Barista", PIN "0000"</p>
-                    </div>
-                  </div>
                 </TabsContent>
 
                 <TabsContent value="register">
