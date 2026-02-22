@@ -231,13 +231,6 @@ const Layout = () => {
               <span className="text-[8px]">Gestione</span>
             </NavLink>
           )}
-          <button
-            onClick={openCredentialsDialog}
-            className="flex flex-col items-center gap-0 px-1 py-1 rounded-lg transition-colors text-muted-foreground"
-          >
-            <Key className="w-4 h-4" />
-            <span className="text-[8px]">Profilo</span>
-          </button>
         </div>
       </nav>
 
