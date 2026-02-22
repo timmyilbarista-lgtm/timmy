@@ -498,6 +498,9 @@ const Manager = () => {
                       <div className="flex-1">
                         <h3 className="font-semibold">{user.name}</h3>
                         <p className="text-sm text-muted-foreground capitalize">{user.role}</p>
+                        {user.pin_display && (
+                          <p className="text-xs text-amber-500 font-mono">PIN: {user.pin_display}</p>
+                        )}
                       </div>
                       <Button
                         variant="ghost"
