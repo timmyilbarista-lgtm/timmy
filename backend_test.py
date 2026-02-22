@@ -8,7 +8,7 @@ import time
 
 class BaristaShiftAPITester:
     def __init__(self):
-        self.base_url = "https://barista-turni-app.preview.emergentagent.com/api"
+        self.base_url = "https://shift-sync-6.preview.emergentagent.com/api"
         self.manager_token = None
         self.barista_token = None
         self.current_shift_id = None
