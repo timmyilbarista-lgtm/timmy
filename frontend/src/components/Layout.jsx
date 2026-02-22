@@ -43,8 +43,45 @@ const Layout = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+  const [credentialsDialog, setCredentialsDialog] = useState(false);
+  const [credentialsForm, setCredentialsForm] = useState({ name: "", pin: "", confirmPin: "" });
 
   const isManager = user?.role === "manager";
+
+  const openCredentialsDialog = () => {
+    setCredentialsForm({ name: user?.name || "", pin: "", confirmPin: "" });
+    setCredentialsDialog(true);
+  };
+
+  const saveCredentials = async () => {
+    if (credentialsForm.pin && credentialsForm.pin !== credentialsForm.confirmPin) {
+      toast.error("I PIN non corrispondono");
+      return;
+    }
+    if (credentialsForm.pin && credentialsForm.pin.length !== 4) {
+      toast.error("Il PIN deve essere di 4 cifre");
+      return;
+    }
+    try {
+      const updateData = {};
+      if (credentialsForm.name && credentialsForm.name !== user?.name) {
+        updateData.name = credentialsForm.name;
+      }
+      if (credentialsForm.pin) {
+        updateData.pin = credentialsForm.pin;
+      }
+      if (Object.keys(updateData).length === 0) {
+        toast.error("Nessuna modifica da salvare");
+        return;
+      }
+      await api.put(`/users/${user?.id}/self`, updateData);
+      toast.success("Credenziali aggiornate! Effettua di nuovo l'accesso.");
+      setCredentialsDialog(false);
+      logout();
+    } catch (error) {
+      toast.error("Errore nell'aggiornamento");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex">
