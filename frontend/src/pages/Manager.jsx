@@ -65,11 +65,14 @@ const iconOptions = [
 
 const Manager = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  const isAdmin = user?.role === "admin";
 
   // Dialogs
   const [categoryDialog, setCategoryDialog] = useState({ open: false, category: null });
