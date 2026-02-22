@@ -255,9 +255,7 @@ const Dashboard = () => {
       {shift ? (
         <>
           {/* Progress Overview */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
             className="bg-card rounded-2xl border border-border p-6 card-shadow"
           >
             <div className="flex items-center justify-between mb-4">
@@ -285,7 +283,7 @@ const Dashboard = () => {
                 </span>
               </div>
             )}
-          </motion.div>
+          </div>
 
 
           {/* Category Grid with Drag & Drop */}
