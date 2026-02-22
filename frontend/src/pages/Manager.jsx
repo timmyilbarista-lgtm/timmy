@@ -242,21 +242,12 @@ const Manager = () => {
         await api.put(`/users/${userDialog.user.id}`, updateData);
         toast.success("Utente aggiornato");
       } else {
-        // Create user - show recovery code
-        const response = await api.post("/users", userForm);
-        setUserDialog({ open: false, user: null });
-        setRecoveryCodeDialog({ 
-          open: true, 
-          code: response.data.recovery_code, 
-          userName: userForm.name,
-          pin: userForm.pin
-        });
-        toast.success("Utente creato");
+        // Create user
+        await api.post("/users", userForm);
+        toast.success(`✅ Utente creato: ${userForm.name} / PIN: ${userForm.pin}`);
       }
       fetchData();
-      if (userDialog.user) {
-        setUserDialog({ open: false, user: null });
-      }
+      setUserDialog({ open: false, user: null });
     } catch (error) {
       toast.error(error.response?.data?.detail || "Errore nel salvataggio");
     }
