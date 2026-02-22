@@ -478,7 +478,8 @@ const Manager = () => {
           </div>
         </TabsContent>
 
-        {/* Users Tab */}
+        {/* Users Tab - Only for Admin */}
+        {isAdmin && (
         <TabsContent value="users" className="space-y-4">
           <Button onClick={() => openUserDialog()} className="gap-2" data-testid="add-user-btn">
             <Plus className="w-4 h-4" />
