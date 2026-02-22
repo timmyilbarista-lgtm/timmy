@@ -252,7 +252,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=401, detail="Invalid token")
 
 async def require_manager(user: dict = Depends(get_current_user)):
-    if user["role"] != "manager":
+    if user["role"] not in ["manager", "admin"]:
         raise HTTPException(status_code=403, detail="Manager access required")
     return user
 
