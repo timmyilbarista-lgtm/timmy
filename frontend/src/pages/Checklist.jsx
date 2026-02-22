@@ -98,6 +98,38 @@ const SortableItem = ({ item, children }) => {
   );
 };
 
+// Sortable Category Component
+const SortableCategory = ({ category, children }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: category.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="relative">
+      <div 
+        {...attributes} 
+        {...listeners}
+        className="absolute left-2 top-4 cursor-grab active:cursor-grabbing touch-none p-2 text-muted-foreground hover:text-foreground z-10"
+      >
+        <GripVertical className="w-5 h-5" />
+      </div>
+      {children}
+    </div>
+  );
+};
+
 const iconMap = {
   package: Package,
   coffee: Coffee,
