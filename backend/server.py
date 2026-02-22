@@ -352,11 +352,17 @@ async def update_own_credentials(user_id: str, data: UserUpdate, user: dict = De
     if user["id"] != user_id:
         raise HTTPException(status_code=403, detail="Non puoi modificare le credenziali di altri utenti")
     
+    # Check if password was already changed (except for admin)
+    db_user = await db.users.find_one({"id": user_id})
+    if db_user and db_user.get("password_changed") and user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Hai già modificato le credenziali una volta")
+    
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
     # Hash PIN if provided
     if "pin" in update_data and update_data["pin"]:
         update_data["pin_display"] = update_data["pin"]
         update_data["pin"] = bcrypt.hashpw(update_data["pin"].encode(), bcrypt.gensalt()).decode()
+        update_data["password_changed"] = True  # Mark as changed
     if update_data:
         await db.users.update_one({"id": user_id}, {"$set": update_data})
     return {"success": True}
