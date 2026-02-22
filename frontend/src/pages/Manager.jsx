@@ -75,10 +75,12 @@ const Manager = () => {
   const [categoryDialog, setCategoryDialog] = useState({ open: false, category: null });
   const [itemDialog, setItemDialog] = useState({ open: false, item: null });
   const [deleteDialog, setDeleteDialog] = useState({ open: false, type: null, id: null });
+  const [userDialog, setUserDialog] = useState({ open: false, user: null });
 
   // Forms
   const [categoryForm, setCategoryForm] = useState({ name: "", icon: "clipboard-list", order: 0 });
   const [itemForm, setItemForm] = useState({ category_id: "", name: "", description: "", order: 0 });
+  const [userForm, setUserForm] = useState({ name: "", pin: "", role: "barista" });
 
   useEffect(() => {
     fetchData();
