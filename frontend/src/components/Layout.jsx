@@ -31,8 +31,8 @@ import api from "../lib/api";
 import { cn } from "../lib/utils";
 
 const navItems = [
-  { path: "/", icon: LayoutDashboard, label: "Dashboard" },
   { path: "/checklist", icon: ClipboardCheck, label: "Checklist" },
+  { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { path: "/turni", icon: CalendarDays, label: "Turni" },
   { path: "/problemi", icon: AlertTriangle, label: "Problemi" },
   { path: "/notes", icon: MessageSquare, label: "Note" },
