@@ -230,6 +230,53 @@ const Layout = () => {
           )}
         </div>
       </nav>
+
+      {/* Credentials Dialog */}
+      <Dialog open={credentialsDialog} onOpenChange={setCredentialsDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Modifica Credenziali</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Nome Utente</Label>
+              <Input
+                value={credentialsForm.name}
+                onChange={(e) => setCredentialsForm({ ...credentialsForm, name: e.target.value })}
+                placeholder="Il tuo nome"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Nuovo PIN (lascia vuoto per non cambiare)</Label>
+              <Input
+                type="password"
+                value={credentialsForm.pin}
+                onChange={(e) => setCredentialsForm({ ...credentialsForm, pin: e.target.value })}
+                placeholder="Nuovo PIN (4 cifre)"
+                maxLength={4}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Conferma PIN</Label>
+              <Input
+                type="password"
+                value={credentialsForm.confirmPin}
+                onChange={(e) => setCredentialsForm({ ...credentialsForm, confirmPin: e.target.value })}
+                placeholder="Conferma PIN"
+                maxLength={4}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCredentialsDialog(false)}>
+              Annulla
+            </Button>
+            <Button onClick={saveCredentials}>
+              Salva
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
