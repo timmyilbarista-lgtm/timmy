@@ -59,10 +59,14 @@ const Layout = () => {
       toast.error("I PIN non corrispondono");
       return;
     }
-    if (credentialsForm.pin && credentialsForm.pin.length < 4) {
-      toast.error("Il PIN deve essere di almeno 4 cifre");
+    
+    // Validazione lunghezza PIN in base al ruolo
+    const minPinLength = user?.role === "admin" ? 6 : 4;
+    if (credentialsForm.pin && credentialsForm.pin.length < minPinLength) {
+      toast.error(`Il PIN deve essere di almeno ${minPinLength} cifre`);
       return;
     }
+    
     try {
       const updateData = {};
       if (credentialsForm.name && credentialsForm.name !== user?.name) {
