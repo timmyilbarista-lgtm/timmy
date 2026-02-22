@@ -472,14 +472,6 @@ const Checklist = () => {
             </div>
           </SortableContext>
         </DndContext>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
       ) : (
         /* Items List with Drag & Drop */
         <DndContext
