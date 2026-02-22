@@ -59,8 +59,8 @@ const Layout = () => {
       toast.error("I PIN non corrispondono");
       return;
     }
-    if (credentialsForm.pin && credentialsForm.pin.length !== 4) {
-      toast.error("Il PIN deve essere di 4 cifre");
+    if (credentialsForm.pin && credentialsForm.pin.length < 4) {
+      toast.error("Il PIN deve essere di almeno 4 cifre");
       return;
     }
     try {
@@ -80,7 +80,7 @@ const Layout = () => {
       setCredentialsDialog(false);
       logout();
     } catch (error) {
-      toast.error("Errore nell'aggiornamento");
+      toast.error(error.response?.data?.detail || "Errore nell'aggiornamento");
     }
   };
 
