@@ -158,16 +158,18 @@ const Layout = () => {
           </div>
 
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={openCredentialsDialog}
-              data-testid="change-credentials-btn"
-              className="flex-1 h-10"
-              title="Cambia credenziali"
-            >
-              <Key className="w-4 h-4" />
-            </Button>
+            {user?.role === "admin" && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={openCredentialsDialog}
+                data-testid="change-credentials-btn"
+                className="flex-1 h-10"
+                title="Cambia credenziali"
+              >
+                <Key className="w-4 h-4" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon"
