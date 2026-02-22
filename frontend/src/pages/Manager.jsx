@@ -532,6 +532,7 @@ const Manager = () => {
             ))}
           </div>
         </TabsContent>
+        )}
       </Tabs>
 
       {/* Category Dialog */}
