@@ -420,44 +420,58 @@ const Checklist = () => {
 
       {/* Category Selection or Items */}
       {!selectedCategory ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {categories.map((category, index) => {
-            const Icon = iconMap[category.icon] || ClipboardList;
-            const { total, completed } = getCategoryStats(category.id);
-            const isComplete = total > 0 && completed === total;
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={categories.map(c => c.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {categories.map((category, index) => {
+                const Icon = iconMap[category.icon] || ClipboardList;
+                const { total, completed } = getCategoryStats(category.id);
+                const isComplete = total > 0 && completed === total;
 
-            return (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <Link to={`/checklist/${category.id}`} data-testid={`checklist-category-${category.id}`}>
-                  <Card
-                    className={`cursor-pointer transition-all duration-200 hover:shadow-card-hover ${
-                      isComplete ? "border-success/50" : ""
-                    }`}
-                  >
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                            isComplete ? "bg-success/20 text-success" : "bg-secondary text-secondary-foreground"
-                          }`}
-                        >
-                          <Icon className="w-7 h-7" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-heading font-semibold text-lg">{category.name}</h3>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Progress value={(completed / total) * 100 || 0} className="flex-1 h-2" />
-                            <span className="text-sm text-muted-foreground">
-                              {completed}/{total}
-                            </span>
+                return (
+                  <SortableCategory key={category.id} category={category}>
+                    <Link to={`/checklist/${category.id}`} data-testid={`checklist-category-${category.id}`}>
+                      <Card
+                        className={`cursor-pointer transition-all duration-200 hover:shadow-card-hover ${
+                          isComplete ? "border-success/50" : ""
+                        }`}
+                      >
+                        <CardContent className="p-6 pl-10">
+                          <div className="flex items-center gap-4">
+                            <div
+                              className={`w-14 h-14 rounded-xl flex items-center justify-center ${
+                                isComplete ? "bg-success/20 text-success" : "bg-secondary text-secondary-foreground"
+                              }`}
+                            >
+                              <Icon className="w-7 h-7" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-heading font-semibold text-lg">{category.name}</h3>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Progress value={(completed / total) * 100 || 0} className="flex-1 h-2" />
+                                <span className="text-sm text-muted-foreground">
+                                  {completed}/{total}
+                                </span>
+                              </div>
+                            </div>
+                            {isComplete && <CheckCircle2 className="w-6 h-6 text-success" />}
                           </div>
-                        </div>
-                        {isComplete && <CheckCircle2 className="w-6 h-6 text-success" />}
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </SortableCategory>
+                );
+              })}
+            </div>
+          </SortableContext>
+        </DndContext>
                       </div>
                     </CardContent>
                   </Card>
