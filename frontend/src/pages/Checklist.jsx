@@ -588,16 +588,20 @@ const Checklist = () => {
 
                 return (
                   <SortableItem key={item.id} item={item}>
-                    <ChecklistItemCard 
-                      item={item}
-                      completed={completed}
-                      completion={completion}
-                      isManager={isManager}
-                      toggleItem={toggleItem}
-                      setNoteDialog={setNoteDialog}
-                      openEditDialog={openEditDialog}
-                      setDeleteDialog={setDeleteDialog}
-                    />
+                    {({ attributes, listeners }) => (
+                      <ChecklistItemCard 
+                        item={item}
+                        completed={completed}
+                        completion={completion}
+                        isManager={isManager}
+                        toggleItem={toggleItem}
+                        setNoteDialog={setNoteDialog}
+                        openEditDialog={openEditDialog}
+                        setDeleteDialog={setDeleteDialog}
+                        dragAttributes={attributes}
+                        dragListeners={listeners}
+                      />
+                    )}
                   </SortableItem>
                 );
               })}
