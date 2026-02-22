@@ -1,4 +1,5 @@
 import { Outlet, NavLink, useLocation } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { 
@@ -12,9 +13,21 @@ import {
   Moon,
   Coffee,
   CalendarDays,
-  AlertTriangle
+  AlertTriangle,
+  Key
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "./ui/dialog";
+import { toast } from "sonner";
+import api from "../lib/api";
 import { cn } from "../lib/utils";
 
 const navItems = [
