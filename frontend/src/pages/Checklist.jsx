@@ -89,6 +89,112 @@ const SortableItem = ({ item, children }) => {
   );
 };
 
+// Checklist Item Card with internal drag handle
+const ChecklistItemCard = ({ 
+  item, 
+  completed, 
+  completion, 
+  isManager, 
+  toggleItem, 
+  setNoteDialog, 
+  openEditDialog, 
+  setDeleteDialog,
+  dragHandleProps 
+}) => {
+  return (
+    <Card
+      className={`checklist-item transition-all duration-200 ${
+        completed ? "checklist-item-complete" : "checklist-item-pending"
+      }`}
+    >
+      <CardContent className="p-4 md:p-6">
+        <div className="flex items-start gap-4">
+          {/* Drag Handle inside card */}
+          <div 
+            {...(dragHandleProps?.attributes || {})} 
+            {...(dragHandleProps?.listeners || {})}
+            className="cursor-grab active:cursor-grabbing touch-none p-1 text-muted-foreground hover:text-foreground"
+          >
+            <GripVertical className="w-5 h-5" />
+          </div>
+
+          <div
+            className="flex items-center justify-center cursor-pointer touch-target"
+            onClick={() => toggleItem(item.id, !completed)}
+            data-testid={`checklist-item-toggle-${item.id}`}
+          >
+            <Checkbox
+              checked={completed}
+              className={`h-6 w-6 rounded-md checkbox-custom ${
+                completed ? "bg-success border-success text-success-foreground" : ""
+              }`}
+            />
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <h3
+              className={`font-medium text-lg ${
+                completed ? "line-through text-muted-foreground" : ""
+              }`}
+            >
+              {item.name}
+            </h3>
+            {item.description && (
+              <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+            )}
+
+            {completion?.completed_by_name && (
+              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                <User className="w-3 h-3" />
+                <span>Completato da {completion.completed_by_name}</span>
+              </div>
+            )}
+
+            {completion?.notes && (
+              <div className="mt-2 p-2 bg-muted/50 rounded-lg text-sm">
+                <MessageSquare className="w-3 h-3 inline-block mr-1" />
+                {completion.notes}
+              </div>
+            )}
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setNoteDialog({ open: true, item, note: completion?.notes || "" })}
+            data-testid={`add-note-btn-${item.id}`}
+            className="shrink-0"
+          >
+            <MessageSquare className="w-4 h-4" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => openEditDialog(item)}
+            data-testid={`edit-item-btn-${item.id}`}
+            className="shrink-0 text-accent"
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+          
+          {isManager && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setDeleteDialog({ open: true, item })}
+              data-testid={`delete-item-btn-${item.id}`}
+              className="shrink-0 text-destructive"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 // Sortable Category Component
 const SortableCategory = ({ category, children }) => {
   const {
