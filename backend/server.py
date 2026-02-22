@@ -319,6 +319,10 @@ async def create_user(data: UserCreate, user: dict = Depends(require_manager)):
     if existing:
         raise HTTPException(status_code=400, detail="Utente già esistente")
     
+    # Validate PIN (must be exactly 4 digits)
+    if len(data.pin) != 4 or not data.pin.isdigit():
+        raise HTTPException(status_code=400, detail="Il PIN deve essere di 4 cifre")
+    
     # Hash the PIN
     hashed_pin = bcrypt.hashpw(data.pin.encode(), bcrypt.gensalt()).decode()
     
