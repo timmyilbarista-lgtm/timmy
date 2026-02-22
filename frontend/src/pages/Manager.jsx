@@ -735,68 +735,6 @@ const Manager = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {/* Recovery Code Dialog */}
-      <Dialog open={recoveryCodeDialog.open} onOpenChange={(open) => !open && setRecoveryCodeDialog({ open: false, code: "", userName: "", pin: "" })}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Key className="w-5 h-5 text-primary" />
-              Utente Creato con Successo
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
-              <p className="text-sm text-muted-foreground mb-2">Credenziali per <strong>{recoveryCodeDialog.userName}</strong>:</p>
-              <div className="flex items-center justify-between bg-background rounded-lg p-3 mb-2">
-                <span className="font-mono text-lg">PIN: {recoveryCodeDialog.pin}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    navigator.clipboard.writeText(recoveryCodeDialog.pin);
-                    toast.success("PIN copiato!");
-                  }}
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-            
-            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-              <p className="text-sm text-muted-foreground mb-2">
-                <strong>Codice di Recupero</strong> (da conservare):
-              </p>
-              <div className="flex items-center justify-between bg-background rounded-lg p-3">
-                <span className="font-mono text-xl font-bold tracking-wider">{recoveryCodeDialog.code}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    navigator.clipboard.writeText(recoveryCodeDialog.code);
-                    toast.success("Codice copiato!");
-                  }}
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Questo codice serve per recuperare il PIN se dimenticato. 
-                Comunicalo al cliente e chiedigli di conservarlo.
-              </p>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button 
-              onClick={() => setRecoveryCodeDialog({ open: false, code: "", userName: "", pin: "" })}
-              className="w-full"
-            >
-              <Check className="w-4 h-4 mr-2" />
-              Ho preso nota
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
