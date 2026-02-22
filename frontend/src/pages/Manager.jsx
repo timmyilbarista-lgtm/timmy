@@ -283,13 +283,13 @@ const Manager = () => {
       <div>
         <h1 className="font-heading text-2xl md:text-3xl font-bold">Gestione</h1>
         <p className="text-muted-foreground">
-          Configura categorie, attivita e utenti
+          Configura categorie{isAdmin ? ", attivita e utenti" : " e attivita"}
         </p>
       </div>
 
       {/* Tabs */}
       <Tabs defaultValue="categories" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className={`grid w-full ${isAdmin ? "grid-cols-3" : "grid-cols-2"}`}>
           <TabsTrigger value="categories" data-testid="tab-categories" className="gap-2">
             <FolderKanban className="w-4 h-4" />
             <span className="hidden sm:inline">Categorie</span>
@@ -298,10 +298,12 @@ const Manager = () => {
             <ListChecks className="w-4 h-4" />
             <span className="hidden sm:inline">Attivita</span>
           </TabsTrigger>
-          <TabsTrigger value="users" data-testid="tab-users" className="gap-2">
-            <Users className="w-4 h-4" />
-            <span className="hidden sm:inline">Utenti</span>
-          </TabsTrigger>
+          {isAdmin && (
+            <TabsTrigger value="users" data-testid="tab-users" className="gap-2">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Utenti</span>
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* Categories Tab */}
