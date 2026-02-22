@@ -9,9 +9,18 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 import uuid
+import secrets
+import string
 from datetime import datetime, timezone
 import jwt
 import bcrypt
+
+def generate_recovery_code(length=8):
+    """Genera un codice di recupero alfanumerico"""
+    alphabet = string.ascii_uppercase + string.digits
+    # Rimuovi caratteri ambigui (0, O, I, 1, L)
+    alphabet = alphabet.replace('0', '').replace('O', '').replace('I', '').replace('1', '').replace('L', '')
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
