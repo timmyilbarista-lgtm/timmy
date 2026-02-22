@@ -45,6 +45,12 @@ App per gestione cambi turno nei bar. I baristi devono completare una checklist 
 ### Bug Fix (21 Feb 2026)
 - **Risolto**: App non si apriva a causa di import duplicati di `Link` in `Checklist.jsx` e `Notes.jsx`
 
+### Bug Fix (22 Feb 2026)
+- **Risolto**: L'Admin non poteva vedere la tab "Utenti" nella sezione Gestione
+  - **Causa**: La funzione `require_manager` nel backend accettava solo ruolo `manager`, escludendo `admin`
+  - **Fix**: Modificato `server.py` per accettare sia `admin` che `manager` negli endpoint protetti
+  - **Verificato**: Admin può vedere/gestire utenti, Manager clienti NON possono vedere la tab Utenti
+
 ## Test Results
 - Backend: 100% (26/26 tests)
 - Frontend: 100% (all flows working)
