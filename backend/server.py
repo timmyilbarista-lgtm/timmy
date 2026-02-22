@@ -365,6 +365,48 @@ async def delete_user(user_id: str, user: dict = Depends(require_manager)):
     await db.users.delete_one({"id": user_id})
     return {"success": True}
 
+# Recovery password endpoint (no auth required)
+class RecoveryRequest(BaseModel):
+    name: str
+    recovery_code: str
+    new_pin: str
+
+@api_router.post("/auth/recover")
+async def recover_password(data: RecoveryRequest):
+    # Find user by name
+    user = await db.users.find_one({"name": data.name})
+    if not user:
+        raise HTTPException(status_code=404, detail="Utente non trovato")
+    
+    # Verify recovery code
+    if user.get("recovery_code") != data.recovery_code.upper():
+        raise HTTPException(status_code=400, detail="Codice di recupero non valido")
+    
+    # Validate new PIN
+    if len(data.new_pin) < 4:
+        raise HTTPException(status_code=400, detail="Il PIN deve avere almeno 4 cifre")
+    
+    # Hash new PIN and generate new recovery code
+    hashed_pin = bcrypt.hashpw(data.new_pin.encode(), bcrypt.gensalt()).decode()
+    new_recovery_code = generate_recovery_code()
+    
+    # Update user
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {
+            "pin": hashed_pin,
+            "pin_display": data.new_pin,
+            "recovery_code": new_recovery_code,
+            "password_changed": False  # Reset so they can change once more
+        }}
+    )
+    
+    return {
+        "success": True, 
+        "message": "PIN aggiornato con successo",
+        "new_recovery_code": new_recovery_code
+    }
+
 @api_router.put("/users/{user_id}/self")
 async def update_own_credentials(user_id: str, data: UserUpdate, user: dict = Depends(get_current_user)):
     # Users can only update their own credentials
