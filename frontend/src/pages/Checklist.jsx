@@ -144,7 +144,31 @@ const Checklist = () => {
   const handleDragEnd = async (event) => {
     const { active, over } = event;
     
-    if (active.id !== over?.id && selectedCategory) {
+    if (active.id !== over?.id) {
+      // Drag categories
+      if (!selectedCategory) {
+        const oldIndex = categories.findIndex(c => c.id === active.id);
+        const newIndex = categories.findIndex(c => c.id === over.id);
+        
+        const reorderedCategories = arrayMove(categories, oldIndex, newIndex);
+        setCategories(reorderedCategories);
+        
+        // Save to backend
+        try {
+          const reorderData = reorderedCategories.map((cat, index) => ({
+            id: cat.id,
+            order: index
+          }));
+          await api.put("/categories/reorder", { items: reorderData });
+          toast.success("Ordine salvato!");
+        } catch (error) {
+          toast.error("Errore nel salvataggio dell'ordine");
+          fetchData();
+        }
+        return;
+      }
+      
+      // Drag items within category
       const categoryItems = items.filter(i => i.category_id === selectedCategory.id);
       const oldIndex = categoryItems.findIndex(i => i.id === active.id);
       const newIndex = categoryItems.findIndex(i => i.id === over.id);
