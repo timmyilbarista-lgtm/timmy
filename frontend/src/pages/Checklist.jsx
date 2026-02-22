@@ -84,7 +84,18 @@ const SortableItem = ({ item, children }) => {
 
   return (
     <div ref={setNodeRef} style={style}>
-      {React.cloneElement(children, { dragHandleProps: { attributes, listeners } })}
+      <div className="flex items-start gap-2">
+        <div 
+          {...attributes} 
+          {...listeners}
+          className="mt-6 cursor-grab active:cursor-grabbing touch-none p-1 text-muted-foreground hover:text-foreground"
+        >
+          <GripVertical className="w-5 h-5" />
+        </div>
+        <div className="flex-1">
+          {children}
+        </div>
+      </div>
     </div>
   );
 };
