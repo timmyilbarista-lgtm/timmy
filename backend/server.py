@@ -293,6 +293,44 @@ async def get_users(user: dict = Depends(get_current_user)):
     users = await db.users.find({}, {"_id": 0, "pin": 0}).to_list(100)
     return users
 
+class UserCreate(BaseModel):
+    name: str
+    pin: str
+    role: str = "barista"
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    pin: Optional[str] = None
+    role: Optional[str] = None
+
+@api_router.post("/users")
+async def create_user(data: UserCreate, user: dict = Depends(require_manager)):
+    # Check if user already exists
+    existing = await db.users.find_one({"name": data.name})
+    if existing:
+        raise HTTPException(status_code=400, detail="Utente già esistente")
+    
+    new_user = {
+        "id": str(uuid.uuid4()),
+        "name": data.name,
+        "pin": data.pin,
+        "role": data.role
+    }
+    await db.users.insert_one(new_user)
+    return {"id": new_user["id"], "name": new_user["name"], "role": new_user["role"]}
+
+@api_router.put("/users/{user_id}")
+async def update_user(user_id: str, data: UserUpdate, user: dict = Depends(require_manager)):
+    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    if update_data:
+        await db.users.update_one({"id": user_id}, {"$set": update_data})
+    return {"success": True}
+
+@api_router.delete("/users/{user_id}")
+async def delete_user(user_id: str, user: dict = Depends(require_manager)):
+    await db.users.delete_one({"id": user_id})
+    return {"success": True}
+
 # ============== CATEGORY ENDPOINTS ==============
 
 @api_router.get("/categories")
