@@ -42,7 +42,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/landing" element={<Landing />} />
-      <Route path="/login" element={user ? <Navigate to="/checklist" replace /> : <Login />} />
+      <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
       <Route
         path="/"
         element={
@@ -51,7 +51,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Navigate to="/checklist" replace />} />
+        <Route index element={<Dashboard />} />
         <Route path="checklist" element={<Checklist />} />
         <Route path="checklist/:categoryId" element={<Checklist />} />
         <Route path="dashboard" element={<Dashboard />} />
