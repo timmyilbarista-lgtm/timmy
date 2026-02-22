@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
-import { Coffee, Sun, Moon, Eye, EyeOff } from "lucide-react";
+import { Coffee, Sun, Moon, Eye, EyeOff, KeyRound, ArrowLeft, Copy, Check } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -15,9 +15,16 @@ const Login = () => {
   const { theme, toggleTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [showPin, setShowPin] = useState(false);
+  const [showRecovery, setShowRecovery] = useState(false);
+  const [newRecoveryCode, setNewRecoveryCode] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     pin: "",
+  });
+  const [recoveryData, setRecoveryData] = useState({
+    name: "",
+    recovery_code: "",
+    new_pin: "",
   });
 
   // Seed data on first load
@@ -67,6 +74,29 @@ const Login = () => {
       toast.success("Account creato con successo!");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Errore nella registrazione");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRecovery = async (e) => {
+    e.preventDefault();
+    if (!recoveryData.name || !recoveryData.recovery_code || !recoveryData.new_pin) {
+      toast.error("Compila tutti i campi");
+      return;
+    }
+    if (recoveryData.new_pin.length < 4) {
+      toast.error("Il nuovo PIN deve avere almeno 4 cifre");
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const response = await api.post("/auth/recover", recoveryData);
+      setNewRecoveryCode(response.data.new_recovery_code);
+      toast.success("PIN aggiornato con successo!");
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Errore nel recupero");
     } finally {
       setLoading(false);
     }
