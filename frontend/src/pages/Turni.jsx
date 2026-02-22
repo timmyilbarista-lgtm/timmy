@@ -24,7 +24,7 @@ const Turni = () => {
   const [editingSchedule, setEditingSchedule] = useState(null);
   const [form, setForm] = useState({ user_id: "", date: "", start_time: "08:00", end_time: "16:00", notes: "" });
 
-  const isManager = user?.role === "manager";
+  const isManager = user?.role === "manager" || user?.role === "admin";
 
   useEffect(() => { fetchData(); }, [currentMonth]);
 
