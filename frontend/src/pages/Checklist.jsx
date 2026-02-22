@@ -98,7 +98,9 @@ const ChecklistItemCard = ({
   toggleItem, 
   setNoteDialog, 
   openEditDialog, 
-  setDeleteDialog
+  setDeleteDialog,
+  dragAttributes,
+  dragListeners
 }) => {
   return (
     <Card
@@ -108,6 +110,15 @@ const ChecklistItemCard = ({
     >
       <CardContent className="p-4 md:p-6">
         <div className="flex items-start gap-4">
+          {/* Drag Handle inside card */}
+          <div 
+            {...dragAttributes} 
+            {...dragListeners}
+            className="cursor-grab active:cursor-grabbing touch-none p-1 text-muted-foreground hover:text-foreground"
+          >
+            <GripVertical className="w-5 h-5" />
+          </div>
+
           <div
             className="flex items-center justify-center cursor-pointer touch-target"
             onClick={() => toggleItem(item.id, !completed)}
