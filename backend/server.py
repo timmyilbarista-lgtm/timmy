@@ -463,6 +463,22 @@ async def delete_category(category_id: str, user: dict = Depends(require_manager
     await db.checklist_items.delete_many({"category_id": category_id})
     return {"success": True}
 
+class CategoryReorderItem(BaseModel):
+    id: str
+    order: int
+
+class CategoryReorderRequest(BaseModel):
+    items: List[CategoryReorderItem]
+
+@api_router.put("/categories/reorder")
+async def reorder_categories(data: CategoryReorderRequest, user: dict = Depends(get_current_user)):
+    for item in data.items:
+        await db.categories.update_one(
+            {"id": item.id},
+            {"$set": {"order": item.order}}
+        )
+    return {"success": True}
+
 # ============== CHECKLIST ITEM ENDPOINTS ==============
 
 @api_router.get("/checklist-items")
