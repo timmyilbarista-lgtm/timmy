@@ -465,6 +465,10 @@ const Manager = () => {
 
         {/* Users Tab */}
         <TabsContent value="users" className="space-y-4">
+          <Button onClick={() => openUserDialog()} className="gap-2" data-testid="add-user-btn">
+            <Plus className="w-4 h-4" />
+            Nuovo Utente
+          </Button>
           <div className="space-y-3">
             {users.map((user, index) => (
               <motion.div
@@ -485,15 +489,23 @@ const Manager = () => {
                         <h3 className="font-semibold">{user.name}</h3>
                         <p className="text-sm text-muted-foreground capitalize">{user.role}</p>
                       </div>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          user.role === "manager"
-                            ? "bg-accent/20 text-accent"
-                            : "bg-secondary text-secondary-foreground"
-                        }`}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => openUserDialog(user)}
+                        data-testid={`edit-user-${user.id}`}
                       >
-                        {user.role === "manager" ? "Manager" : "Barista"}
-                      </span>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setDeleteDialog({ open: true, type: "user", id: user.id })}
+                        className="text-destructive"
+                        data-testid={`delete-user-${user.id}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
