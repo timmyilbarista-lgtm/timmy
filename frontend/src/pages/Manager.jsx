@@ -637,13 +637,15 @@ const Manager = () => {
             <AlertDialogDescription>
               {deleteDialog.type === "category"
                 ? "Eliminando questa categoria verranno eliminate anche tutte le attivita associate. Questa azione non può essere annullata."
+                : deleteDialog.type === "user"
+                ? "Sei sicuro di voler eliminare questo utente? Questa azione non può essere annullata."
                 : "Sei sicuro di voler eliminare questa attivita? Questa azione non può essere annullata."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction
-              onClick={deleteDialog.type === "category" ? deleteCategory : deleteItem}
+              onClick={deleteDialog.type === "category" ? deleteCategory : deleteDialog.type === "user" ? deleteUser : deleteItem}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               data-testid="confirm-delete-btn"
             >
@@ -652,6 +654,63 @@ const Manager = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* User Dialog */}
+      <Dialog open={userDialog.open} onOpenChange={(open) => !open && setUserDialog({ open: false, user: null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {userDialog.user ? "Modifica Utente" : "Nuovo Utente"}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Nome</Label>
+              <Input
+                value={userForm.name}
+                onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
+                placeholder="Nome utente o bar"
+                data-testid="user-name-input"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>PIN {userDialog.user && "(lascia vuoto per non cambiare)"}</Label>
+              <Input
+                type="password"
+                value={userForm.pin}
+                onChange={(e) => setUserForm({ ...userForm, pin: e.target.value })}
+                placeholder="PIN (4 cifre)"
+                maxLength={4}
+                data-testid="user-pin-input"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Ruolo</Label>
+              <Select
+                value={userForm.role}
+                onValueChange={(value) => setUserForm({ ...userForm, role: value })}
+              >
+                <SelectTrigger data-testid="user-role-select">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="manager">Manager</SelectItem>
+                  <SelectItem value="barista">Barista</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUserDialog({ open: false, user: null })}>
+              Annulla
+            </Button>
+            <Button onClick={saveUser} data-testid="save-user-btn">
+              <Save className="w-4 h-4 mr-2" />
+              Salva
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
