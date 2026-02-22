@@ -65,7 +65,7 @@ import { toast } from "sonner";
 import api from "../lib/api";
 
 // Sortable Item Component
-const SortableItem = ({ item, children }) => {
+const SortableItem = ({ item, children, dragHandle }) => {
   const {
     attributes,
     listeners,
@@ -84,16 +84,7 @@ const SortableItem = ({ item, children }) => {
 
   return (
     <div ref={setNodeRef} style={style} className="relative">
-      <div 
-        {...attributes} 
-        {...listeners}
-        className="absolute left-2 top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing touch-none p-2 text-muted-foreground hover:text-foreground z-10"
-      >
-        <GripVertical className="w-5 h-5" />
-      </div>
-      <div className="pl-10">
-        {children}
-      </div>
+      {React.cloneElement(children, { dragHandle: { attributes, listeners } })}
     </div>
   );
 };
