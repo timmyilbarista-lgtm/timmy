@@ -41,6 +41,7 @@ const iconMap = {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [shift, setShift] = useState(null);
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
