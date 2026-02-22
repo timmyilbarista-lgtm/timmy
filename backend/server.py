@@ -346,6 +346,21 @@ async def delete_user(user_id: str, user: dict = Depends(require_manager)):
     await db.users.delete_one({"id": user_id})
     return {"success": True}
 
+@api_router.put("/users/{user_id}/self")
+async def update_own_credentials(user_id: str, data: UserUpdate, user: dict = Depends(get_current_user)):
+    # Users can only update their own credentials
+    if user["id"] != user_id:
+        raise HTTPException(status_code=403, detail="Non puoi modificare le credenziali di altri utenti")
+    
+    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    # Hash PIN if provided
+    if "pin" in update_data and update_data["pin"]:
+        update_data["pin_display"] = update_data["pin"]
+        update_data["pin"] = bcrypt.hashpw(update_data["pin"].encode(), bcrypt.gensalt()).decode()
+    if update_data:
+        await db.users.update_one({"id": user_id}, {"$set": update_data})
+    return {"success": True}
+
 # ============== CATEGORY ENDPOINTS ==============
 
 @api_router.get("/categories")
