@@ -274,24 +274,24 @@ const History = () => {
             </DialogTitle>
           </DialogHeader>
 
-          {shiftDetail && (
+          {shiftDetail && selectedShift && (
             <div className="space-y-6 py-4">
               {/* Overview */}
               <div className="flex items-center justify-between p-4 bg-muted rounded-xl">
                 <div>
                   <p className="text-sm text-muted-foreground">Completamento</p>
                   <p className="text-2xl font-bold">
-                    {selectedShift.completed_items}/{selectedShift.total_items}
+                    {selectedShift.completed_items || 0}/{selectedShift.total_items || 0}
                   </p>
                 </div>
                 <div
                   className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                    selectedShift.completion_rate === 100
+                    (selectedShift.completion_rate || 0) === 100
                       ? "bg-success/20 text-success"
                       : "bg-destructive/20 text-destructive"
                   }`}
                 >
-                  <span className="text-xl font-bold">{selectedShift.completion_rate}%</span>
+                  <span className="text-xl font-bold">{selectedShift.completion_rate || 0}%</span>
                 </div>
               </div>
 
