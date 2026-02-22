@@ -80,6 +80,7 @@ const Manager = () => {
   const [itemDialog, setItemDialog] = useState({ open: false, item: null });
   const [deleteDialog, setDeleteDialog] = useState({ open: false, type: null, id: null });
   const [userDialog, setUserDialog] = useState({ open: false, user: null });
+  const [recoveryCodeDialog, setRecoveryCodeDialog] = useState({ open: false, code: "", userName: "" });
 
   // Forms
   const [categoryForm, setCategoryForm] = useState({ name: "", icon: "clipboard-list", order: 0 });
