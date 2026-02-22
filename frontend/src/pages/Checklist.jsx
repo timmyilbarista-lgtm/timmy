@@ -485,27 +485,26 @@ const Checklist = () => {
                           <MessageSquare className="w-4 h-4" />
                         </Button>
 
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openEditDialog(item)}
+                          data-testid={`edit-item-btn-${item.id}`}
+                          className="shrink-0 text-accent"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        
                         {isManager && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => openEditDialog(item)}
-                              data-testid={`edit-item-btn-${item.id}`}
-                              className="shrink-0 text-accent"
-                            >
-                              <Pencil className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => setDeleteDialog({ open: true, item })}
-                              data-testid={`delete-item-btn-${item.id}`}
-                              className="shrink-0 text-destructive"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setDeleteDialog({ open: true, item })}
+                            data-testid={`delete-item-btn-${item.id}`}
+                            className="shrink-0 text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         )}
                       </div>
                     </CardContent>
