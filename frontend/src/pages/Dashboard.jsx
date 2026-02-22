@@ -287,6 +287,84 @@ const Dashboard = () => {
             )}
           </motion.div>
 
+
+          {/* Category Grid with Drag & Drop */}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={categories.map(c => c.id)}
+              strategy={rectSortingStrategy}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {categories.map((category) => {
+                  const Icon = iconMap[category.icon] || ClipboardList;
+                  const { total, completed } = getCategoryStats(category.id);
+                  const isComplete = total > 0 && completed === total;
+                  const hasItems = total > 0;
+
+                  return (
+                    <SortableCategoryCard key={category.id} category={category}>
+                      <Link to={`/checklist/${category.id}`} data-testid={`category-card-${category.id}`}>
+                        <Card
+                          className={`category-card cursor-pointer transition-all duration-300 hover:shadow-card-hover pl-8 ${
+                            isComplete
+                              ? "border-success/50 bg-success/5"
+                              : hasItems && completed < total
+                              ? "border-destructive/50 bg-destructive/5"
+                              : ""
+                          }`}
+                        >
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center justify-between">
+                              <div
+                                className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                                  isComplete ? "bg-success/20 text-success" : "bg-secondary text-secondary-foreground"
+                                }`}
+                              >
+                                <Icon className="w-6 h-6" />
+                              </div>
+                              {hasItems && (
+                                <div
+                                  className={`completion-badge w-8 h-8 rounded-full flex items-center justify-center ${
+                                    isComplete ? "complete bg-success text-success-foreground" : "incomplete bg-destructive text-destructive-foreground"
+                                  }`}
+                                >
+                                  {isComplete ? (
+                                    <CheckCircle2 className="w-5 h-5" />
+                                  ) : (
+                                    <XCircle className="w-5 h-5" />
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <CardTitle className="font-heading text-lg mt-3">{category.name}</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">
+                                {completed}/{total} completati
+                              </span>
+                              <span className={isComplete ? "text-success font-medium" : "text-muted-foreground"}>
+                                {total > 0 ? Math.round((completed / total) * 100) : 0}%
+                              </span>
+                            </div>
+                            <Progress
+                              value={total > 0 ? (completed / total) * 100 : 0}
+                              className="h-2 mt-2"
+                            />
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    </SortableCategoryCard>
+                  );
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
+
         </>
       ) : (
         /* No Shift Open */
