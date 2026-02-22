@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import api from "../lib/api";
 
 const History = () => {
+  const navigate = useNavigate();
   const [shifts, setShifts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState({ from: null, to: null });
